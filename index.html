@@ -201,20 +201,15 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
 <!-- ===================== VISÃO GERAL ===================== -->
 <div class="tab-pane fade show active" id="tab-visao" role="tabpanel">
   <div class="filter-container">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
-      <div style="flex:1;">
-        <div class="filter-label" style="margin-bottom:8px;display:flex;align-items:center;gap:5px;"><i class="material-icons" style="font-size:13px;">filter_list</i> FILTROS</div>
-        <div class="filters-row" id="vg-filters-row">
-          <div class="filter-group"><label class="filter-label">Ano</label><select class="form-select" id="vg-ano"><option value="">Todos</option></select></div>
-          <div class="filter-group"><label class="filter-label">Período</label><select class="form-select" id="vg-periodo"><option value="">Todos</option><option>Janeiro</option><option>Fevereiro</option><option>Março</option><option>Abril</option><option>Maio</option><option>Junho</option><option>Julho</option><option>Agosto</option><option>Setembro</option><option>Outubro</option><option>Novembro</option><option>Dezembro</option></select></div>
-          <div class="filter-group"><label class="filter-label">Sigla</label><input class="form-control" id="vg-sigla" list="vg-list-sigla" placeholder="Digite a sigla..."><datalist id="vg-list-sigla"></datalist></div>
-          <div class="filter-group"><label class="filter-label">Órgão</label><input class="form-control" id="vg-orgao" list="vg-list-orgao" placeholder="Digite o órgão..."><datalist id="vg-list-orgao"></datalist></div>
-        </div>
-        <div class="botoes-abaixo">
-          <button class="btn-pesquisa" onclick="aplicarFiltroVG()"><i class="material-icons">refresh</i> Atualizar Filtros</button>
-          <button class="btn-secondary-custom" onclick="limparFiltroVG()"><i class="material-icons">filter_alt_off</i> Limpar Filtros</button>
-        </div>
-      </div>
+    <div class="filters-row" id="vg-filters-row">
+      <div class="filter-group"><label class="filter-label">Ano</label><select class="form-select" id="vg-ano"><option value="">Todos</option></select></div>
+      <div class="filter-group"><label class="filter-label">Período</label><select class="form-select" id="vg-periodo"><option value="">Todos</option><option>Janeiro</option><option>Fevereiro</option><option>Março</option><option>Abril</option><option>Maio</option><option>Junho</option><option>Julho</option><option>Agosto</option><option>Setembro</option><option>Outubro</option><option>Novembro</option><option>Dezembro</option></select></div>
+      <div class="filter-group"><label class="filter-label">Sigla</label><input class="form-control" id="vg-sigla" list="vg-list-sigla" placeholder="Digite a sigla..."><datalist id="vg-list-sigla"></datalist></div>
+      <div class="filter-group"><label class="filter-label">Órgão</label><input class="form-control" id="vg-orgao" list="vg-list-orgao" placeholder="Digite o órgão..."><datalist id="vg-list-orgao"></datalist></div>
+    </div>
+    <div style="border-top:1px solid #eef0f4;margin-top:10px;padding-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn-pesquisa" onclick="aplicarFiltroVG()"><i class="material-icons">refresh</i> Atualizar Filtros</button>
+      <button class="btn-secondary-custom" onclick="limparFiltroVG()"><i class="material-icons">filter_alt_off</i> Limpar Filtros</button>
     </div>
   </div>
 
@@ -241,13 +236,13 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
     <div style="padding:10px 14px;background:#fff;border-bottom:1px solid #dee2e6;">
       <div class="toolbar">
         <div class="toolbar-left">
-          <span style="font-size:11px;color:#6c757d;">Total: <strong id="vg-total-reg">0</strong> registros</span>
-          <input type="text" class="form-control" id="vg-search" placeholder="Pesquisar em todos os campos..." style="width:260px;height:30px;font-size:11px;" oninput="filtrarTabelaVG()">
-        </div>
-        <div class="toolbar-right">
           <button class="btn-export" onclick="imprimirVG()"><i class="material-icons">print</i> Imprimir</button>
           <button class="btn-export" onclick="exportarCSV('vg')"><i class="material-icons">description</i> CSV</button>
           <button class="btn-export" onclick="exportarPDF('vg')"><i class="material-icons">picture_as_pdf</i> PDF</button>
+        </div>
+        <div class="toolbar-right">
+          <input type="text" class="form-control" id="vg-search" placeholder="Buscar registros..." style="width:220px;height:30px;font-size:11px;" oninput="filtrarTabelaVG()">
+          <span style="font-size:11px;color:#6c757d;white-space:nowrap;">Total: <strong id="vg-total-reg">0</strong> registros</span>
         </div>
       </div>
     </div>
@@ -290,33 +285,26 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
 <!-- ===================== EMPENHO/FAVORECIDO ===================== -->
 <div class="tab-pane fade" id="tab-empenho" role="tabpanel">
   <div class="filter-container">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
-      <div style="flex:1;">
-        <div class="filter-label" style="margin-bottom:8px;"><i class="material-icons" style="font-size:13px;">filter_list</i> FILTROS</div>
-        <div class="filters-row">
-          <div class="filter-group"><label class="filter-label">Ano</label><select class="form-select" id="emp-ano"><option value="">Todos</option></select></div>
-          <div class="filter-group"><label class="filter-label">Período</label><select class="form-select" id="emp-periodo"><option value="">Todos</option><option>Janeiro</option><option>Fevereiro</option><option>Março</option><option>Abril</option><option>Maio</option><option>Junho</option><option>Julho</option><option>Agosto</option><option>Setembro</option><option>Outubro</option><option>Novembro</option><option>Dezembro</option></select></div>
-          <div class="filter-group"><label class="filter-label">Sigla</label><input class="form-control" id="emp-sigla" list="emp-list-sigla" placeholder="Sigla..."><datalist id="emp-list-sigla"></datalist></div>
-          <div class="filter-group"><label class="filter-label">Órgão</label><input class="form-control" id="emp-orgao" list="emp-list-orgao" placeholder="Órgão..."><datalist id="emp-list-orgao"></datalist></div>
-        </div>
-        <div class="filters-row">
-          <div class="filter-group"><label class="filter-label">Nº Empenho</label><input class="form-control" id="emp-num" placeholder="Número do empenho..."></div>
-          <div class="filter-group"><label class="filter-label">Favorecido</label><input class="form-control" id="emp-favorecido" list="emp-list-fav" placeholder="Nome do favorecido..."><datalist id="emp-list-fav"></datalist></div>
-          <div class="filter-group"><label class="filter-label">CNPJ/CPF</label><input class="form-control" id="emp-cnpj" placeholder="CNPJ ou CPF..."></div>
-          <div class="filter-group"><label class="filter-label">Modalidade Licitação</label><input class="form-control" id="emp-modalidade" list="emp-list-mod" placeholder="Modalidade..."><datalist id="emp-list-mod"></datalist></div>
-        </div>
-        <div class="filters-row">
-          <div class="filter-group"><label class="filter-label">Processo de Compra</label><input class="form-control" id="emp-processo" list="emp-list-proc" placeholder="Processo..."><datalist id="emp-list-proc"></datalist></div>
-          <div class="filter-group"><label class="filter-label">Contrato</label><input class="form-control" id="emp-contrato" placeholder="Número do contrato..."></div>
-          <div class="filter-group filter-group-auto" style="flex:0;align-self:flex-end;padding-bottom:0;">
-            <div class="botoes-abaixo" style="margin-top:0;">
-              <button class="btn-pesquisa" onclick="aplicarFiltroEmp()"><i class="material-icons">refresh</i> Atualizar Filtros</button>
-              <button class="btn-secondary-custom" onclick="limparFiltroEmp()"><i class="material-icons">filter_alt_off</i> Limpar Filtros</button>
-              <button class="btn-consulta" onclick="abrirQueryBuilder('emp')"><i class="material-icons">build</i> Monte sua Consulta</button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="filters-row">
+      <div class="filter-group"><label class="filter-label">Ano</label><select class="form-select" id="emp-ano"><option value="">Todos</option></select></div>
+      <div class="filter-group"><label class="filter-label">Período</label><select class="form-select" id="emp-periodo"><option value="">Todos</option><option>Janeiro</option><option>Fevereiro</option><option>Março</option><option>Abril</option><option>Maio</option><option>Junho</option><option>Julho</option><option>Agosto</option><option>Setembro</option><option>Outubro</option><option>Novembro</option><option>Dezembro</option></select></div>
+      <div class="filter-group"><label class="filter-label">Sigla</label><input class="form-control" id="emp-sigla" list="emp-list-sigla" placeholder="Sigla..."><datalist id="emp-list-sigla"></datalist></div>
+      <div class="filter-group"><label class="filter-label">Órgão</label><input class="form-control" id="emp-orgao" list="emp-list-orgao" placeholder="Órgão..."><datalist id="emp-list-orgao"></datalist></div>
+    </div>
+    <div class="filters-row" style="margin-top:8px;">
+      <div class="filter-group"><label class="filter-label">Nº Empenho</label><input class="form-control" id="emp-num" placeholder="Número do empenho..."></div>
+      <div class="filter-group"><label class="filter-label">Favorecido</label><input class="form-control" id="emp-favorecido" list="emp-list-fav" placeholder="Nome do favorecido..."><datalist id="emp-list-fav"></datalist></div>
+      <div class="filter-group"><label class="filter-label">CNPJ/CPF</label><input class="form-control" id="emp-cnpj" placeholder="CNPJ ou CPF..."></div>
+      <div class="filter-group"><label class="filter-label">Modalidade Licitação</label><input class="form-control" id="emp-modalidade" list="emp-list-mod" placeholder="Modalidade..."><datalist id="emp-list-mod"></datalist></div>
+    </div>
+    <div class="filters-row" style="margin-top:8px;">
+      <div class="filter-group"><label class="filter-label">Processo de Compra</label><input class="form-control" id="emp-processo" list="emp-list-proc" placeholder="Processo..."><datalist id="emp-list-proc"></datalist></div>
+      <div class="filter-group"><label class="filter-label">Contrato</label><input class="form-control" id="emp-contrato" placeholder="Número do contrato..."></div>
+    </div>
+    <div style="border-top:1px solid #eef0f4;margin-top:10px;padding-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn-pesquisa" onclick="aplicarFiltroEmp()"><i class="material-icons">refresh</i> Atualizar Filtros</button>
+      <button class="btn-secondary-custom" onclick="limparFiltroEmp()"><i class="material-icons">filter_alt_off</i> Limpar Filtros</button>
+      <button class="btn-consulta" onclick="abrirQueryBuilder('emp')"><i class="material-icons">build</i> Monte sua Consulta</button>
     </div>
   </div>
 
@@ -324,10 +312,6 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
     <div style="padding:10px 14px;background:#fff;border-bottom:1px solid #dee2e6;">
       <div class="toolbar">
         <div class="toolbar-left">
-          <span style="font-size:11px;color:#6c757d;">Total: <strong id="emp-total-reg">0</strong> registros</span>
-          <input type="text" class="form-control" id="emp-search" placeholder="Pesquisar em qualquer campo (sem limite)..." style="width:300px;height:30px;font-size:11px;" oninput="filtrarTabelaEmp()">
-        </div>
-        <div class="toolbar-right">
           <button class="btn-export" onclick="imprimirTabela('emp')"><i class="material-icons">print</i> Imprimir</button>
           <button class="btn-export" onclick="exportarCSV('emp')"><i class="material-icons">description</i> CSV</button>
           <button class="btn-export" onclick="exportarPDF('emp')"><i class="material-icons">picture_as_pdf</i> PDF</button>
@@ -338,6 +322,10 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
               <div id="emp-col-list"></div>
             </div>
           </div>
+        </div>
+        <div class="toolbar-right">
+          <input type="text" class="form-control" id="emp-search" placeholder="Buscar registros..." style="width:250px;height:30px;font-size:11px;" oninput="filtrarTabelaEmp()">
+          <span style="font-size:11px;color:#6c757d;white-space:nowrap;">Total: <strong id="emp-total-reg">0</strong> registros</span>
         </div>
       </div>
     </div>
@@ -364,7 +352,6 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
 <!-- ===================== ITENS DE DESPESA ===================== -->
 <div class="tab-pane fade" id="tab-itens" role="tabpanel">
   <div class="filter-container">
-    <div class="filter-label" style="margin-bottom:8px;"><i class="material-icons" style="font-size:13px;">filter_list</i> FILTROS</div>
     <div class="filters-row">
       <div class="filter-group"><label class="filter-label">Ano</label><select class="form-select" id="it-ano"><option value="">Todos</option></select></div>
       <div class="filter-group"><label class="filter-label">Período</label><select class="form-select" id="it-periodo"><option value="">Todos</option><option>Janeiro</option><option>Fevereiro</option><option>Março</option><option>Abril</option><option>Maio</option><option>Junho</option><option>Julho</option><option>Agosto</option><option>Setembro</option><option>Outubro</option><option>Novembro</option><option>Dezembro</option></select></div>
@@ -377,7 +364,7 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
       <div class="filter-group"><label class="filter-label">Cód. Elem. Despesa</label><input class="form-control" id="it-cod-elem" list="it-list-cod-elem" placeholder="Cód. elemento..."><datalist id="it-list-cod-elem"></datalist></div>
       <div class="filter-group"><label class="filter-label">Elemento Despesa</label><input class="form-control" id="it-elem" list="it-list-elem" placeholder="Elemento..."><datalist id="it-list-elem"></datalist></div>
     </div>
-    <div class="botoes-abaixo">
+    <div style="border-top:1px solid #eef0f4;margin-top:10px;padding-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
       <button class="btn-pesquisa" onclick="aplicarFiltroIt()"><i class="material-icons">refresh</i> Atualizar Filtros</button>
       <button class="btn-secondary-custom" onclick="limparFiltroIt()"><i class="material-icons">filter_alt_off</i> Limpar Filtros</button>
       <button class="btn-consulta" onclick="abrirQueryBuilder('it')"><i class="material-icons">build</i> Monte sua Consulta</button>
@@ -388,10 +375,6 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
     <div style="padding:10px 14px;background:#fff;border-bottom:1px solid #dee2e6;">
       <div class="toolbar">
         <div class="toolbar-left">
-          <span style="font-size:11px;color:#6c757d;">Total: <strong id="it-total-reg">0</strong> registros</span>
-          <input type="text" class="form-control" id="it-search" placeholder="Pesquisar em qualquer campo..." style="width:300px;height:30px;font-size:11px;" oninput="filtrarTabelaIt()">
-        </div>
-        <div class="toolbar-right">
           <button class="btn-export" onclick="imprimirTabela('it')"><i class="material-icons">print</i> Imprimir</button>
           <button class="btn-export" onclick="exportarCSV('it')"><i class="material-icons">description</i> CSV</button>
           <button class="btn-export" onclick="exportarPDF('it')"><i class="material-icons">picture_as_pdf</i> PDF</button>
@@ -402,6 +385,10 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
               <div id="it-col-list"></div>
             </div>
           </div>
+        </div>
+        <div class="toolbar-right">
+          <input type="text" class="form-control" id="it-search" placeholder="Buscar registros..." style="width:250px;height:30px;font-size:11px;" oninput="filtrarTabelaIt()">
+          <span style="font-size:11px;color:#6c757d;white-space:nowrap;">Total: <strong id="it-total-reg">0</strong> registros</span>
         </div>
       </div>
     </div>
@@ -428,7 +415,6 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
 <!-- ===================== PROGRAMA ===================== -->
 <div class="tab-pane fade" id="tab-programa" role="tabpanel">
   <div class="filter-container">
-    <div class="filter-label" style="margin-bottom:8px;"><i class="material-icons" style="font-size:13px;">filter_list</i> FILTROS</div>
     <div class="filters-row">
       <div class="filter-group"><label class="filter-label">Ano</label><select class="form-select" id="pg-ano"><option value="">Todos</option></select></div>
       <div class="filter-group"><label class="filter-label">Período</label><select class="form-select" id="pg-periodo"><option value="">Todos</option><option>Janeiro</option><option>Fevereiro</option><option>Março</option><option>Abril</option><option>Maio</option><option>Junho</option><option>Julho</option><option>Agosto</option><option>Setembro</option><option>Outubro</option><option>Novembro</option><option>Dezembro</option></select></div>
@@ -441,7 +427,7 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
       <div class="filter-group"><label class="filter-label">Código Ação</label><input class="form-control" id="pg-cod-acao" list="pg-list-cod-acao" placeholder="Cód. ação..."><datalist id="pg-list-cod-acao"></datalist></div>
       <div class="filter-group"><label class="filter-label">Ação</label><input class="form-control" id="pg-acao" list="pg-list-acao" placeholder="Ação..."><datalist id="pg-list-acao"></datalist></div>
     </div>
-    <div class="botoes-abaixo">
+    <div style="border-top:1px solid #eef0f4;margin-top:10px;padding-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
       <button class="btn-pesquisa" onclick="aplicarFiltroPg()"><i class="material-icons">refresh</i> Atualizar Filtros</button>
       <button class="btn-secondary-custom" onclick="limparFiltroPg()"><i class="material-icons">filter_alt_off</i> Limpar Filtros</button>
       <button class="btn-consulta" onclick="abrirQueryBuilder('pg')"><i class="material-icons">build</i> Monte sua Consulta</button>
@@ -452,10 +438,6 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
     <div style="padding:10px 14px;background:#fff;border-bottom:1px solid #dee2e6;">
       <div class="toolbar">
         <div class="toolbar-left">
-          <span style="font-size:11px;color:#6c757d;">Total: <strong id="pg-total-reg">0</strong> registros</span>
-          <input type="text" class="form-control" id="pg-search" placeholder="Pesquisar em qualquer campo..." style="width:300px;height:30px;font-size:11px;" oninput="filtrarTabelaPg()">
-        </div>
-        <div class="toolbar-right">
           <button class="btn-export" onclick="imprimirTabela('pg')"><i class="material-icons">print</i> Imprimir</button>
           <button class="btn-export" onclick="exportarCSV('pg')"><i class="material-icons">description</i> CSV</button>
           <button class="btn-export" onclick="exportarPDF('pg')"><i class="material-icons">picture_as_pdf</i> PDF</button>
@@ -466,6 +448,10 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
               <div id="pg-col-list"></div>
             </div>
           </div>
+        </div>
+        <div class="toolbar-right">
+          <input type="text" class="form-control" id="pg-search" placeholder="Buscar registros..." style="width:250px;height:30px;font-size:11px;" oninput="filtrarTabelaPg()">
+          <span style="font-size:11px;color:#6c757d;white-space:nowrap;">Total: <strong id="pg-total-reg">0</strong> registros</span>
         </div>
       </div>
     </div>
@@ -508,40 +494,21 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
     <div class="row g-3 mt-1">
       <div class="col-md-6">
         <div class="download-card">
-          <div class="download-card-header"><i class="material-icons">domain</i> Órgão (por ano)</div>
-          <div class="download-card-body">
-            <p style="font-size:12px;color:#64748b;margin-bottom:12px;">Despesa consolidada por unidade orçamentária e exercício. Arquivo CSV delimitado por ponto-e-vírgula.</p>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="dl-orgao-btns"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="download-card">
-          <div class="download-card-header"><i class="material-icons">receipt_long</i> Empenho/Favorecido (por ano)</div>
-          <div class="download-card-body">
-            <p style="font-size:12px;color:#64748b;margin-bottom:12px;">Despesa por empenho com identificação do favorecido, elemento e fonte de recurso. Arquivo CSV delimitado por ponto-e-vírgula.</p>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="dl-emp-btns"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="download-card">
-          <div class="download-card-header"><i class="material-icons">account_tree</i> Programa (por ano)</div>
-          <div class="download-card-body">
-            <p style="font-size:12px;color:#64748b;margin-bottom:12px;">Despesa por programa e ação orçamentária. Arquivo CSV delimitado por ponto-e-vírgula.</p>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="dl-prog-btns"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="download-card">
           <div class="download-card-header"><i class="material-icons">open_in_new</i> Portal de Dados Abertos MG</div>
           <div class="download-card-body">
             <p style="font-size:12px;color:#64748b;margin-bottom:12px;">Acesse todos os datasets de despesa pública do Estado de Minas Gerais no Portal de Dados Abertos.</p>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
-              <a href="https://dados.mg.gov.br/dataset/portal_despesa" target="_blank" class="btn-pesquisa" style="text-decoration:none;"><i class="material-icons">open_in_new</i> Portal dados.mg.gov.br</a>
-              <a href="https://dados.mg.gov.br/dataset/portal_despesa" target="_blank" class="btn-secondary-custom" style="text-decoration:none;"><i class="material-icons">search</i> Consultar Despesas</a>
+              <a href="https://dados.mg.gov.br/dataset/portal_despesa" target="_blank" class="btn-pesquisa" style="text-decoration:none;"><i class="material-icons">open_in_new</i> Acessar dados.mg.gov.br</a>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="download-card">
+          <div class="download-card-header"><i class="material-icons">receipt_long</i> Empenhos Totais</div>
+          <div class="download-card-body">
+            <p style="font-size:12px;color:#64748b;margin-bottom:12px;">Baixe os dados completos de empenho/favorecido por exercício. Arquivo CSV delimitado por ponto-e-vírgula.</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="dl-emp-btns"></div>
           </div>
         </div>
       </div>
@@ -573,7 +540,7 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
               <span id="qb-drop-hint" style="font-size:11px;color:#94a3b8;padding:4px;">Arraste campos da esquerda ou clique em + para adicionar</span>
             </div>
             <div style="font-size:11px;font-weight:700;color:#1a3a5c;margin-bottom:6px;">Filtros de dados</div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px;">
               <div style="flex:1;min-width:110px;">
                 <label class="filter-label">Ano</label>
                 <select class="form-select" id="qb-fil-ano" style="height:34px;font-size:11px;"><option value="">Todos</option></select>
@@ -587,12 +554,44 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
                 <input class="form-control" id="qb-fil-favorecido" placeholder="Nome..." style="height:34px;font-size:11px;">
               </div>
               <div style="flex:1;min-width:130px;">
+                <label class="filter-label">CNPJ/CPF</label>
+                <input class="form-control" id="qb-fil-cnpj" placeholder="CNPJ ou CPF..." style="height:34px;font-size:11px;">
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px;">
+              <div style="flex:1;min-width:130px;">
                 <label class="filter-label">Órgão / Sigla</label>
                 <input class="form-control" id="qb-fil-orgao" placeholder="Órgão ou sigla..." style="height:34px;font-size:11px;">
               </div>
               <div style="flex:1;min-width:130px;">
                 <label class="filter-label">Elemento Despesa</label>
                 <input class="form-control" id="qb-fil-elemento" placeholder="Elemento..." style="height:34px;font-size:11px;">
+              </div>
+              <div style="flex:1;min-width:130px;">
+                <label class="filter-label">Item Despesa</label>
+                <input class="form-control" id="qb-fil-item" placeholder="Item..." style="height:34px;font-size:11px;">
+              </div>
+              <div style="flex:1;min-width:130px;">
+                <label class="filter-label">Fonte de Recurso</label>
+                <input class="form-control" id="qb-fil-fonte" placeholder="Fonte..." style="height:34px;font-size:11px;">
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px;">
+              <div style="flex:1;min-width:130px;">
+                <label class="filter-label">Processo de Compra</label>
+                <input class="form-control" id="qb-fil-processo" placeholder="Processo..." style="height:34px;font-size:11px;">
+              </div>
+              <div style="flex:1;min-width:130px;">
+                <label class="filter-label">Modalidade Licitação</label>
+                <input class="form-control" id="qb-fil-modalidade" placeholder="Modalidade..." style="height:34px;font-size:11px;">
+              </div>
+              <div style="flex:1;min-width:130px;">
+                <label class="filter-label">Contrato</label>
+                <input class="form-control" id="qb-fil-contrato" placeholder="Nº contrato..." style="height:34px;font-size:11px;">
+              </div>
+              <div style="flex:1;min-width:130px;">
+                <label class="filter-label">Programa</label>
+                <input class="form-control" id="qb-fil-programa" placeholder="Programa..." style="height:34px;font-size:11px;">
               </div>
             </div>
             <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
@@ -859,8 +858,8 @@ async function carregarDados() {
     // Init default view
     dadosFiltradosVG = [...dadosOrgao];
     dadosFiltradosEmp = [...dadosEmpenho];
-    dadosFiltradosIt = [...dadosEmpenho];
-    dadosFiltradosPg = [...dadosPrograma];
+    dadosFiltradosIt = agruparItens(dadosEmpenho);
+    dadosFiltradosPg = agruparPrograma(dadosPrograma);
 
     renderVG();
     renderEmp();
@@ -1097,8 +1096,16 @@ function renderColSel(containerId, cols, visObj, callback) {
 
 window.toggleCol = function(containerId, key, checked) {
   if(containerId==='emp-col-list') { colVisEmp[key]=checked; renderEmp(); }
-  else if(containerId==='it-col-list') { colVisIt[key]=checked; renderIt(); }
-  else if(containerId==='pg-col-list') { colVisPg[key]=checked; renderPg(); }
+  else if(containerId==='it-col-list') {
+    colVisIt[key]=checked;
+    dadosFiltradosIt = agruparItens(dadosEmpenho);
+    renderIt();
+  }
+  else if(containerId==='pg-col-list') {
+    colVisPg[key]=checked;
+    dadosFiltradosPg = agruparPrograma(dadosPrograma);
+    renderPg();
+  }
 };
 
 function aplicarFiltroEmp() {
@@ -1149,11 +1156,14 @@ function renderEmp() {
   pgEmp.renderFn = rows => {
     const tbody = document.getElementById('tbody-emp');
     if(!rows.length){tbody.innerHTML='<tr><td colspan="'+visCols.length+'" style="text-align:center;padding:20px;color:#94a3b8;">Nenhum registro encontrado.</td></tr>';return;}
-    tbody.innerHTML = rows.map(d=>'<tr>'+visCols.map(c=>{
-      if(c.key==='numero_empenho') return `<td><a class="link-cell" onclick="abrirDetalheEmpenho(${JSON.stringify(JSON.stringify(d))})">${d[c.key]||'—'}</a></td>`;
-      if(c.key==='data_registro_doc_empenho') { const dt=(d[c.key]||'').split('T')[0].split(' ')[0]; const pts=dt.split('-'); const fmt2=pts.length===3?pts[2]+'/'+pts[1]+'/'+pts[0]:dt; return `<td>${fmt2||'—'}</td>`; }
-      return `<td class="${c.num?'text-right':''}">${c.num?fmt(d[c.key]):(d[c.key]||'—')}</td>`;
-    }).join('')+'</tr>').join('');
+    tbody.innerHTML = rows.map(d=>{
+      const dStr = JSON.stringify(JSON.stringify(d));
+      return '<tr style="cursor:pointer;" onclick="abrirDetalheEmpenho('+dStr+')">'+visCols.map(c=>{
+        if(c.key==='numero_empenho') return `<td><a class="link-cell" onclick="event.stopPropagation();abrirDetalheEmpenho(${dStr})">${d[c.key]||'—'}</a></td>`;
+        if(c.key==='data_registro_doc_empenho') { const dt=(d[c.key]||'').split('T')[0].split(' ')[0]; const pts=dt.split('-'); const fmt2=pts.length===3?pts[2]+'/'+pts[1]+'/'+pts[0]:dt; return `<td>${fmt2||'—'}</td>`; }
+        return `<td class="${c.num?'text-right':''}">${c.num?fmt(d[c.key]):(d[c.key]||'—')}</td>`;
+      }).join('')+'</tr>';
+    }).join('');
     // totals
     const numCols = visCols.filter(c=>c.num);
     const vis = pgEmp.filtered;
@@ -1189,19 +1199,30 @@ const IT_COLS = [
 
 function inicializarColunasIt() {
   IT_COLS.forEach(c=>{ colVisIt[c.key]=c.fixed; });
-  renderColSel('it-col-list', IT_COLS, colVisIt, ()=>renderIt());
+  renderColSel('it-col-list', IT_COLS, colVisIt, ()=>{
+    dadosFiltradosIt = agruparItens(dadosEmpenho);
+    renderIt();
+  });
 }
 
 function agruparItens(data) {
+  // Determina quais dimensões incluir na chave de agrupamento
+  // Se órgão não estiver visível nas colunas, agrupa apenas por item
+  const incluirOrgao = colVisIt['unidade_orcamentaria_nome'] || colVisIt['unidade_orcamentaria_codigo'];
+  const incluirElem = colVisIt['elemento_despesa_codigo'] || colVisIt['elemento_despesa_descricao'];
   const map = {};
   data.forEach(d => {
-    const k = `${d.item_despesa_codigo}||${d.unidade_orcamentaria_nome}`;
-    if(!map[k]) map[k] = {...d, valor_despesa_empenhada:0, valor_despesa_liquidada:0, valor_pago_financeiro:0, valor_despesa_liquidada_rp:0, valor_pago_rp:0};
+    const partes = [d.item_despesa_codigo];
+    if(incluirElem) partes.push(d.elemento_despesa_codigo||'');
+    if(incluirOrgao) partes.push(d.unidade_orcamentaria_nome||'');
+    const k = partes.join('||');
+    if(!map[k]) map[k] = {...d, valor_despesa_empenhada:0, valor_despesa_liquidada:0, valor_pago_financeiro:0, valor_despesa_liquidada_rp:0, valor_pago_rp:0, _empenhos:[]};
     map[k].valor_despesa_empenhada += parseNum(d.valor_despesa_empenhada);
     map[k].valor_despesa_liquidada += parseNum(d.valor_despesa_liquidada);
     map[k].valor_pago_financeiro += parseNum(d.valor_pago_financeiro);
     map[k].valor_despesa_liquidada_rp += parseNum(d.valor_despesa_liquidada_rp);
     map[k].valor_pago_rp += parseNum(d.valor_pago_rp);
+    if(d.numero_empenho) map[k]._empenhos.push(d.numero_empenho);
   });
   return Object.values(map);
 }
@@ -1251,11 +1272,14 @@ function renderIt() {
   pgIt.renderFn = rows => {
     const tbody = document.getElementById('tbody-it');
     if(!rows.length){tbody.innerHTML='<tr><td colspan="'+visCols.length+'" style="text-align:center;padding:20px;color:#94a3b8;">Nenhum registro encontrado.</td></tr>';return;}
-    tbody.innerHTML = rows.map(d=>'<tr>'+visCols.map(c=>{
-      if(c.key==='numero_empenho') return `<td><a class="link-cell" onclick="abrirDetalheEmpenho(${JSON.stringify(JSON.stringify(d))})">${d[c.key]||'—'}</a></td>`;
-      if(c.key==='data_registro_doc_empenho') { const dt=(d[c.key]||'').split('T')[0].split(' ')[0]; const pts=dt.split('-'); const fmt2=pts.length===3?pts[2]+'/'+pts[1]+'/'+pts[0]:dt; return `<td>${fmt2||'—'}</td>`; }
-      return `<td class="${c.num?'text-right':''}">${c.num?fmt(d[c.key]):(d[c.key]||'—')}</td>`;
-    }).join('')+'</tr>').join('');
+    tbody.innerHTML = rows.map(d=>{
+      const dStr = JSON.stringify(JSON.stringify(d));
+      return '<tr>'+visCols.map(c=>{
+        if(c.key==='item_despesa_codigo') return `<td><a class="link-cell" onclick="abrirDetalheItem(${dStr})">${d[c.key]||'—'}</a></td>`;
+        if(c.key==='data_registro_doc_empenho') { const dt=(d[c.key]||'').split('T')[0].split(' ')[0]; const pts=dt.split('-'); const fmt2=pts.length===3?pts[2]+'/'+pts[1]+'/'+pts[0]:dt; return `<td>${fmt2||'—'}</td>`; }
+        return `<td class="${c.num?'text-right':''}">${c.num?fmt(d[c.key]):(d[c.key]||'—')}</td>`;
+      }).join('')+'</tr>';
+    }).join('');
     const numCols = visCols.filter(c=>c.num);
     const vis = pgIt.filtered;
     tfoot.innerHTML='<tr><td colspan="'+(visCols.length-numCols.length)+'">TOTAL</td>'+numCols.map(c=>`<td class="text-right">${fmt(vis.reduce((s,d)=>s+parseNum(d[c.key]),0))}</td>`).join('')+'</tr>';
@@ -1288,7 +1312,29 @@ const PG_COLS = [
 
 function inicializarColunasPg() {
   PG_COLS.forEach(c=>{ colVisPg[c.key]=c.fixed; });
-  renderColSel('pg-col-list', PG_COLS, colVisPg, ()=>renderPg());
+  renderColSel('pg-col-list', PG_COLS, colVisPg, ()=>{
+    dadosFiltradosPg = agruparPrograma(dadosPrograma);
+    renderPg();
+  });
+}
+
+function agruparPrograma(data) {
+  const incluirOrgao = colVisPg['unidade_orcamentaria_nome'] || colVisPg['unidade_orcamentaria_codigo'] || colVisPg['unidade_orcamentaria_sigla'];
+  const incluirAcao = colVisPg['projeto_atividade_codigo'] || colVisPg['projeto_atividade_descricao'];
+  const map = {};
+  data.forEach(d => {
+    const partes = [d.programa_codigo||''];
+    if(incluirAcao) partes.push(d.projeto_atividade_codigo||'');
+    if(incluirOrgao) partes.push(d.unidade_orcamentaria_nome||'');
+    const k = partes.join('||');
+    if(!map[k]) map[k] = {...d, valor_despesa_empenhada:0, valor_despesa_liquidada:0, valor_pago_financeiro:0, valor_despesa_liquidada_rp:0, valor_pago_rp:0};
+    map[k].valor_despesa_empenhada += parseNum(d.valor_despesa_empenhada);
+    map[k].valor_despesa_liquidada += parseNum(d.valor_despesa_liquidada);
+    map[k].valor_pago_financeiro += parseNum(d.valor_pago_financeiro);
+    map[k].valor_despesa_liquidada_rp += parseNum(d.valor_despesa_liquidada_rp);
+    map[k].valor_pago_rp += parseNum(d.valor_pago_rp);
+  });
+  return Object.values(map);
 }
 
 function aplicarFiltroPg() {
@@ -1300,7 +1346,7 @@ function aplicarFiltroPg() {
   const codAcao = g('pg-cod-acao').toLowerCase();
   const acao = g('pg-acao').toLowerCase();
 
-  dadosFiltradosPg = dadosPrograma.filter(d =>
+  dadosFiltradosPg = agruparPrograma(dadosPrograma.filter(d =>
     (!ano || d._ano===ano) &&
     (!sigla || (d.unidade_orcamentaria_sigla||'').toLowerCase().includes(sigla)) &&
     (!orgao || (d.unidade_orcamentaria_nome||'').toLowerCase().includes(orgao)) &&
@@ -1308,12 +1354,12 @@ function aplicarFiltroPg() {
     (!prog || (d.programa_descricao||'').toLowerCase().includes(prog)) &&
     (!codAcao || (d.projeto_atividade_codigo||'').toLowerCase().includes(codAcao)) &&
     (!acao || (d.projeto_atividade_descricao||'').toLowerCase().includes(acao))
-  );
+  ));
   renderPg();
 }
 function limparFiltroPg() {
   ['pg-ano','pg-sigla','pg-orgao','pg-cod-prog','pg-prog','pg-cod-acao','pg-acao'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  dadosFiltradosPg = [...dadosPrograma];
+  dadosFiltradosPg = agruparPrograma(dadosPrograma);
   renderPg();
 }
 
@@ -1473,7 +1519,7 @@ window.qbRemoveField = function(key) {
 window.limparQB = function() {
   qbCampos = [];
   renderQBChips();
-  ['qb-fil-ano','qb-fil-empenho','qb-fil-favorecido','qb-fil-orgao','qb-fil-elemento'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['qb-fil-ano','qb-fil-empenho','qb-fil-favorecido','qb-fil-cnpj','qb-fil-orgao','qb-fil-elemento','qb-fil-item','qb-fil-fonte','qb-fil-processo','qb-fil-modalidade','qb-fil-contrato','qb-fil-programa'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('qb-result-wrap').style.display='none';
 };
 
@@ -1483,14 +1529,28 @@ window.aplicarQB = function() {
   const qbAno = (document.getElementById('qb-fil-ano')?.value||'').trim();
   const qbEmp = (document.getElementById('qb-fil-empenho')?.value||'').trim().toLowerCase();
   const qbFav = (document.getElementById('qb-fil-favorecido')?.value||'').trim().toLowerCase();
+  const qbCnpj = (document.getElementById('qb-fil-cnpj')?.value||'').trim().toLowerCase();
   const qbOrg = (document.getElementById('qb-fil-orgao')?.value||'').trim().toLowerCase();
   const qbElem = (document.getElementById('qb-fil-elemento')?.value||'').trim().toLowerCase();
+  const qbItem = (document.getElementById('qb-fil-item')?.value||'').trim().toLowerCase();
+  const qbFonte = (document.getElementById('qb-fil-fonte')?.value||'').trim().toLowerCase();
+  const qbProc = (document.getElementById('qb-fil-processo')?.value||'').trim().toLowerCase();
+  const qbMod = (document.getElementById('qb-fil-modalidade')?.value||'').trim().toLowerCase();
+  const qbCont = (document.getElementById('qb-fil-contrato')?.value||'').trim().toLowerCase();
+  const qbProg = (document.getElementById('qb-fil-programa')?.value||'').trim().toLowerCase();
   dadosFiltradosQB = src.filter(d =>
     (!qbAno || d._ano===qbAno) &&
     (!qbEmp || (d.numero_empenho||'').toLowerCase().includes(qbEmp)) &&
     (!qbFav || (d.razao_social_credor||'').toLowerCase().includes(qbFav)) &&
+    (!qbCnpj || (d.cnpj_cpf_credor_formatado||'').toLowerCase().includes(qbCnpj)) &&
     (!qbOrg || (d.unidade_orcamentaria_nome||'').toLowerCase().includes(qbOrg) || (d.unidade_orcamentaria_sigla||'').toLowerCase().includes(qbOrg)) &&
-    (!qbElem || (d.elemento_despesa_descricao||'').toLowerCase().includes(qbElem) || (d.elemento_despesa_codigo||'').toLowerCase().includes(qbElem))
+    (!qbElem || (d.elemento_despesa_descricao||'').toLowerCase().includes(qbElem) || (d.elemento_despesa_codigo||'').toLowerCase().includes(qbElem)) &&
+    (!qbItem || (d.item_despesa_descricao||'').toLowerCase().includes(qbItem) || (d.item_despesa_codigo||'').toLowerCase().includes(qbItem)) &&
+    (!qbFonte || (d.fonte_recurso_descricao||'').toLowerCase().includes(qbFonte) || (d.fonte_recurso_codigo||'').toLowerCase().includes(qbFonte)) &&
+    (!qbProc || (d.numero_processo_compra_siad||'').toLowerCase().includes(qbProc)) &&
+    (!qbMod || (d.licitacao_descricao_da_modalidade||'').toLowerCase().includes(qbMod)) &&
+    (!qbCont || (d._contrato||'').toLowerCase().includes(qbCont)) &&
+    (!qbProg || (d.programa_descricao||'').toLowerCase().includes(qbProg) || (d.programa_codigo||'').toLowerCase().includes(qbProg))
   );
   document.getElementById('qb-total-reg').textContent = dadosFiltradosQB.length;
 
@@ -1749,16 +1809,11 @@ window.filterDicTab = function(tab, btn) {
 // ================================================================
 function popularDownloads() {
   const BASE = 'https://raw.githubusercontent.com/transparencia-mg/portal_despesa/refs/heads/main/dataset/data/';
-
-  const orgBtns = document.getElementById('dl-orgao-btns');
   const empBtns = document.getElementById('dl-emp-btns');
-  const progBtns = document.getElementById('dl-prog-btns');
-
+  if(!empBtns) return;
   ANOS.forEach(ano => {
-    orgBtns.innerHTML += `<a href="${BASE}orgao${ano}.csv" download class="btn-pesquisa" style="text-decoration:none;font-size:11px;height:30px;"><i class="material-icons" style="font-size:12px;">download</i> CSV ${ano}</a>`;
     empBtns.innerHTML += `<a href="${BASE}favorecidoempenho${ano}_1.csv" download class="btn-pesquisa" style="text-decoration:none;font-size:11px;height:30px;"><i class="material-icons" style="font-size:12px;">download</i> CSV ${ano} (parte 1)</a>
       <a href="${BASE}favorecidoempenho${ano}_2.csv" download class="btn-pesquisa" style="text-decoration:none;font-size:11px;height:30px;"><i class="material-icons" style="font-size:12px;">download</i> CSV ${ano} (parte 2)</a>`;
-    progBtns.innerHTML += `<a href="${BASE}programa${ano}.csv" download class="btn-pesquisa" style="text-decoration:none;font-size:11px;height:30px;"><i class="material-icons" style="font-size:12px;">download</i> CSV ${ano}</a>`;
   });
 }
 
