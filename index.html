@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Despesa - Portal da Transparência MG</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+<style>
+:root {
+  --primary-dark:#1a3a5c; --primary-darker:#0f2a44; --accent-red:#b93c42;
+  --bg-light:#f5f7fa; --success:#28a745; --warn:#ffc107; --border:#dee2e6;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;overflow-x:hidden;font-family:'Montserrat',sans-serif!important;background:var(--bg-light);}
+body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!important;}
+.material-icons{font-family:'Material Icons'!important;font-size:14px;vertical-align:middle;}
+
+.container-fluid{width:100%;max-width:92%!important;padding:0 30px;margin:0 auto;}
+.tab-content,.tab-pane{width:100%;height:auto;overflow:visible;}
+
+/* NAV */
+.nav-tabs-container{background:transparent;padding:10px 0;margin-top:15px;margin-bottom:10px;}
+.nav-tabs{border:none!important;gap:8px;flex-wrap:wrap;}
+.nav-tabs .nav-link{border:none!important;background:#fff!important;border-radius:10px!important;padding:8px 16px!important;font-weight:500;font-size:12px;color:#1a3a5c!important;display:inline-flex!important;align-items:center;gap:5px;transition:all .2s;white-space:nowrap;}
+.nav-tabs .nav-link:hover{background:#e6e9ed!important;}
+.nav-tabs .nav-link.active{background:#234c63!important;color:#fff!important;box-shadow:0 4px 10px rgba(0,0,0,.15);}
+
+/* DATA */
+.data-box{display:flex;align-items:center;gap:6px;font-size:11px;color:#1a3a5c;font-weight:600;margin-bottom:12px;}
+.data-box i{color:var(--accent-red);font-size:13px;}
+
+/* FILTER */
+.filter-container{background:#fff;border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,.08);padding:18px 20px;margin-bottom:16px;}
+.filter-label{font-size:11px;font-weight:700;color:#1a3a5c;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;display:block;}
+.form-control,.form-select{border:1.5px solid #dfe5ec;border-radius:7px;padding:7px 10px;font-size:12px;transition:all .2s;height:36px;}
+.form-control:focus,.form-select:focus{border-color:var(--accent-red);box-shadow:0 0 0 2px rgba(185,60,66,.12);outline:none;}
+.filters-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+.filter-group{flex:1;min-width:120px;}
+.botoes-abaixo{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;}
+
+/* CARDS */
+.metric-card{background:#fff;border-radius:8px;border:1px solid #e5e9ef;box-shadow:0 3px 12px rgba(0,0,0,.06);overflow:hidden;height:100%;transition:all .25s;}
+.metric-card:hover{box-shadow:0 8px 24px rgba(26,58,92,.13);transform:translateY(-2px);}
+.metric-header{background:#20445d;color:#fff;font-size:11px;font-weight:600;padding:9px 13px;display:flex;justify-content:space-between;align-items:center;}
+.metric-body{padding:12px 14px;}
+.metric-value{font-size:17px;font-weight:700;color:#171c21;}
+.metric-sublabel{font-size:10px;color:#94a3b8;font-weight:500;margin-top:2px;}
+
+/* CHARTS */
+.chart-container{background:#fff;border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,.06);margin-bottom:16px;overflow:hidden;}
+.chart-header{background:#20445d;color:#fff;padding:11px 16px;}
+.chart-title{font-size:12px;font-weight:600;color:#fff;margin:0;}
+.chart-wrapper{height:250px;padding:10px 15px;width:100%;}
+
+/* TOOLBAR */
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+.toolbar-left,.toolbar-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+
+/* BUTTONS */
+.btn-pesquisa{background:#20445d;border:none;padding:0 14px;font-weight:600;border-radius:6px;font-size:12px;color:#fff;display:inline-flex;align-items:center;gap:4px;cursor:pointer;height:34px;white-space:nowrap;transition:all .2s;}
+.btn-pesquisa:hover{background:var(--accent-red);transform:translateY(-1px);}
+.btn-secondary-custom{background:#fff;border:2px solid #0f2a44;color:#0f2a44;padding:0 14px;font-weight:600;font-size:12px;border-radius:6px;display:inline-flex;align-items:center;gap:4px;cursor:pointer;height:34px;white-space:nowrap;transition:all .2s;text-decoration:none!important;}
+.btn-secondary-custom:hover{background:#132837!important;color:#fff!important;border-color:#132837!important;}
+.btn-export{background:transparent!important;border:1px solid #d6dee6;color:#1a3a5c;padding:0 12px;border-radius:6px;font-size:11px;font-weight:500;display:inline-flex;align-items:center;gap:3px;height:30px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.btn-export:hover{background:#1a3a5c!important;color:#fff!important;border-color:#1a3a5c!important;}
+.btn-consulta{background:linear-gradient(135deg,#1a3a5c,#234c63);border:none;padding:0 14px;font-weight:600;border-radius:6px;font-size:12px;color:#fff;display:inline-flex;align-items:center;gap:4px;cursor:pointer;height:34px;white-space:nowrap;transition:all .2s;}
+.btn-consulta:hover{background:linear-gradient(135deg,var(--accent-red),#8c2b30);}
+
+/* TABLE */
+.table-wrapper{background:#fff;border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,.06);overflow:hidden;margin-bottom:16px;}
+.table-fixed{position:relative;overflow:auto;max-height:560px;}
+.table{width:100%;font-size:11.5px;border-collapse:collapse;}
+.table thead th{background:#54697b!important;color:#fff!important;position:sticky;top:0;z-index:10;font-weight:600;padding:10px 9px;font-size:10.5px;text-transform:uppercase;white-space:nowrap;border:1px solid #4a5f6e;cursor:pointer;user-select:none;}
+.table thead th:hover{background:#3d5566!important;}
+.table tbody tr{background:#fff;}
+.table tbody td{padding:8px 9px;vertical-align:middle;border-bottom:1px solid #f0f4f8;font-size:11.5px;}
+.table tbody tr:hover{background:rgba(41,67,90,.04);}
+.table tfoot{position:sticky;bottom:0;z-index:10;}
+.table tfoot td{background:#dfe3e8!important;font-weight:700;font-size:11.5px;padding:8px 9px;border-top:2px solid #c8cfd8;}
+.sortable th{cursor:pointer;}
+.sort-icon{margin-left:4px;opacity:.7;font-size:11px!important;}
+.link-cell{color:#006a82;text-decoration:none;font-weight:600;cursor:pointer;}
+.link-cell:hover{color:var(--accent-red);text-decoration:underline;}
+.text-right{text-align:right!important;}
+.text-center{text-align:center!important;}
+
+/* PAGINATION */
+.pagination-container{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:#fff;border-top:1px solid #dee2e6;flex-wrap:wrap;gap:8px;border-radius:0 0 8px 8px;}
+.pagination-info{font-size:11px;color:#6c757d;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.pagination-controls{display:flex;align-items:center;gap:3px;}
+.pagination-controls button{min-width:32px;height:32px;border:1px solid #dee2e6;background:#fff;color:#1a3a5c;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:12px;padding:0 5px;}
+.pagination-controls button:hover:not(:disabled){background:#1a3a5c;color:#fff;border-color:#1a3a5c;}
+.pagination-controls button.active{background:#1a3a5c;color:#fff;border-color:#1a3a5c;}
+.pagination-controls button:disabled{opacity:.4;cursor:not-allowed;}
+.page-size-select{border:1px solid #d6dee6;border-radius:5px;padding:3px 5px;font-size:11px;background:#fff;cursor:pointer;}
+.page-input-wrap{display:flex;align-items:center;gap:4px;font-size:11px;color:#6c757d;}
+.page-input-wrap input{width:50px;height:28px;border:1px solid #dee2e6;border-radius:5px;text-align:center;font-size:12px;}
+.page-input-wrap button{height:28px;background:#1a3a5c;color:#fff;border:none;border-radius:5px;padding:0 8px;font-size:11px;cursor:pointer;}
+.page-input-wrap button:hover{background:var(--accent-red);}
+
+/* COLUMN SELECTOR */
+.col-sel{position:relative;display:inline-block;}
+.col-sel-dropdown{display:none;position:absolute;right:0;top:100%;background:#fff;min-width:250px;box-shadow:0 8px 16px rgba(0,0,0,.15);border-radius:8px;z-index:2000;margin-top:4px;padding:14px;border:1px solid #e9ecef;max-height:300px;overflow-y:auto;}
+.col-sel-dropdown.show{display:block;}
+.col-sel-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #e9ecef;font-size:12px;font-weight:700;color:#1a3a5c;}
+.col-sel-item{display:flex;align-items:center;padding:5px 6px;border-radius:4px;cursor:pointer;}
+.col-sel-item:hover{background:#f8f9fa;}
+.col-sel-item input{width:13px;height:13px;margin-right:7px;cursor:pointer;accent-color:#1a3a5c;}
+.col-sel-item label{font-size:11px;cursor:pointer;flex:1;color:#1a3a5c;}
+.fixed-badge{font-size:9px;background:#e9ecef;color:#6c757d;padding:1px 5px;border-radius:10px;font-weight:600;margin-right:6px;}
+
+/* METADATA */
+.metadata-container{background:#fff;border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,.06);overflow:hidden;margin-bottom:16px;}
+.metadata-header{background:#20445d;color:#fff;padding:11px 16px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:7px;}
+.metadata-table{width:100%;border-collapse:collapse;font-size:11.5px;}
+.metadata-table thead th{background:#54697b!important;color:#fff!important;padding:9px;font-size:10.5px;text-transform:uppercase;font-weight:600;}
+.metadata-table tbody tr:nth-child(even){background:#f8fafd;}
+.metadata-table tbody td{padding:8px 10px;border-bottom:1px solid #f0f4f8;color:#334155;vertical-align:top;}
+.metadata-table code{background:#e2e8f0;color:#0f172a;padding:1px 5px;border-radius:3px;font-size:10.5px;}
+.dic-search-box{background:#fff;border-radius:8px;padding:14px 18px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.dic-tab-btn{background:#f0f4f8;border:none;padding:6px 14px;border-radius:18px;font-size:11px;font-weight:600;color:#1a3a5c;cursor:pointer;transition:all .2s;}
+.dic-tab-btn.active,.dic-tab-btn:hover{background:#1a3a5c;color:#fff;}
+
+/* LOADING */
+.loading-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(238,241,246,.95);z-index:9999;justify-content:center;align-items:center;flex-direction:column;gap:12px;}
+.loading-overlay.show{display:flex;}
+.loading-text{font-size:12px;color:#20445d;font-weight:700;}
+
+/* TOAST */
+.toast-notif{position:fixed;top:18px;right:18px;background:#fff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.15);padding:11px 18px;transform:translateX(120%);transition:transform .3s;z-index:10000;border-left:4px solid;max-width:320px;}
+.toast-notif.show{transform:translateX(0);}
+.toast-notif.success{border-left-color:#28a745;}
+.toast-notif.error{border-left-color:#b93c42;}
+.toast-content{display:flex;align-items:center;font-size:12px;color:#1a3a5c;gap:7px;}
+
+/* DOWNLOADS */
+.download-card{background:#fff;border-radius:10px;border:1px solid #e5e9ef;box-shadow:0 3px 12px rgba(0,0,0,.06);overflow:hidden;transition:all .25s;margin-bottom:12px;}
+.download-card:hover{box-shadow:0 8px 24px rgba(26,58,92,.13);transform:translateY(-2px);}
+.download-card-header{background:#20445d;color:#fff;padding:10px 14px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:7px;}
+.download-card-body{padding:14px;}
+
+/* QUERY BUILDER */
+.qb-panel{background:#fff;border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,.08);overflow:hidden;display:flex;height:500px;}
+.qb-fields{width:240px;min-width:200px;border-right:1px solid #dee2e6;overflow-y:auto;padding:12px;}
+.qb-canvas{flex:1;display:flex;flex-direction:column;padding:14px;overflow:hidden;}
+.qb-fields-title{font-size:11px;font-weight:700;color:#1a3a5c;text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid #e9ecef;}
+.qb-field-item{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:5px;cursor:grab;font-size:11px;color:#1a3a5c;transition:all .15s;border:1px solid transparent;margin-bottom:3px;}
+.qb-field-item:hover{background:#f0f4f8;border-color:#d6dee6;}
+.qb-field-item.dragging{opacity:.5;}
+.qb-drop-zone{min-height:80px;border:2px dashed #d6dee6;border-radius:8px;padding:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start;align-content:flex-start;margin-bottom:10px;transition:border-color .2s;}
+.qb-drop-zone.dragover{border-color:#1a3a5c;background:#f0f4f8;}
+.qb-chip{background:#1a3a5c;color:#fff;border-radius:14px;padding:4px 10px;font-size:11px;font-weight:500;display:inline-flex;align-items:center;gap:4px;cursor:default;}
+.qb-chip .remove{cursor:pointer;opacity:.7;font-size:10px!important;}
+.qb-chip .remove:hover{opacity:1;}
+.qb-group-title{font-size:10px;font-weight:700;color:#54697b;text-transform:uppercase;letter-spacing:.5px;padding:5px 0 3px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;}
+.qb-group-items{display:none;}
+.qb-group-items.open{display:block;}
+
+/* MODAL */
+.modal-creative .modal-header{background:linear-gradient(135deg,#1a3a5c,#0f2a44);color:#fff!important;padding:14px 18px;border-bottom:none;}
+.modal-creative .modal-header .modal-title{color:#fff!important;font-weight:600;font-size:13px;display:flex;align-items:center;gap:7px;}
+.modal-creative .modal-header .btn-close{filter:brightness(0) invert(1);opacity:1;}
+.modal{overflow-y:auto!important;}
+.modal-open{overflow:hidden!important;padding-right:0!important;}
+
+@media(max-width:768px){
+  .container-fluid{padding:0 10px!important;}
+  .nav-tabs{flex-direction:column;gap:5px;}
+  .filters-row{flex-direction:column;}
+  .qb-panel{flex-direction:column;height:auto;}
+  .qb-fields{width:100%;border-right:none;border-bottom:1px solid #dee2e6;}
+}
+</style>
+</head>
+<body>
+<div style="width:100%;max-width:92%;margin:0 auto;padding:0 30px;">
+
+<!-- NAVEGAÇÃO -->
+<div class="nav-tabs-container">
+  <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+    <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-visao"><i class="material-icons">bar_chart</i> Visão Geral</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-empenho"><i class="material-icons">receipt_long</i> Empenho/Favorecido</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-itens"><i class="material-icons">inventory_2</i> Itens de Despesa</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-programa"><i class="material-icons">account_tree</i> Programa</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-dicionario"><i class="material-icons">menu_book</i> Dicionário de Dados</button></li>
+    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-downloads"><i class="material-icons">download</i> Downloads</button></li>
+  </ul>
+</div>
+
+<div class="data-box"><i class="material-icons">event</i>Atualizado em: <span id="dataAtualizacao">Carregando...</span></div>
+
+<!-- TAB CONTENT -->
+<div class="tab-content" id="mainTabsContent">
+
+<!-- ===================== VISÃO GERAL ===================== -->
+<div class="tab-pane fade show active" id="tab-visao" role="tabpanel">
+  <div class="filter-container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+      <div style="flex:1;">
+        <div class="filter-label" style="margin-bottom:8px;display:flex;align-items:center;gap:5px;"><i class="material-icons" style="font-size:13px;">filter_list</i> FILTROS</div>
+        <div class="filters-row" id="vg-filters-row">
+          <div class="filter-group"><label class="filter-label">Ano</label><select class="form-select" id="vg-ano"><option value="">Todos</option></select></div>
+          <div class="filter-group"><label class="filter-label">Período</label><select class="form-select" id="vg-periodo"><option value="">Todos</option><option>Janeiro</option><option>Fevereiro</option><option>Março</option><option>Abril</option><option>Maio</option><option>Junho</option><option>Julho</option><option>Agosto</option><option>Setembro</option><option>Outubro</option><option>Novembro</option><option>Dezembro</option></select></div>
+          <div class="filter-group"><label class="filter-label">Sigla</label><input class="form-control" id="vg-sigla" list="vg-list-sigla" placeholder="Digite a sigla..."><datalist id="vg-list-sigla"></datalist></div>
+          <div class="filter-group"><label class="filter-label">Órgão</label><input class="form-control" id="vg-orgao" list="vg-list-orgao" placeholder="Digite o órgão..."><datalist id="vg-list-orgao"></datalist></div>
+        </div>
+        <div class="botoes-abaixo">
+          <button class="btn-pesquisa" onclick="aplicarFiltroVG()"><i class="material-icons">refresh</i> Atualizar Filtros</button>
+          <button class="btn-secondary-custom" onclick="limparFiltroVG()"><i class="material-icons">filter_alt_off</i> Limpar Filtros</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTRICAS -->
+  <div class="row g-3 mb-3" id="vg-metrics">
+    <div class="col-6 col-md-3"><div class="metric-card"><div class="metric-header"><span>Valor Empenhado</span><i class="material-icons">assignment</i></div><div class="metric-body"><div class="metric-value" id="m-emp">—</div><div class="metric-sublabel">Total no período</div></div></div></div>
+    <div class="col-6 col-md-3"><div class="metric-card"><div class="metric-header"><span>Valor Liquidado</span><i class="material-icons">check_circle</i></div><div class="metric-body"><div class="metric-value" id="m-liq">—</div><div class="metric-sublabel">Total no período</div></div></div></div>
+    <div class="col-6 col-md-3"><div class="metric-card"><div class="metric-header"><span>Valor Pago</span><i class="material-icons">payments</i></div><div class="metric-body"><div class="metric-value" id="m-pag">—</div><div class="metric-sublabel">Total no período</div></div></div></div>
+    <div class="col-6 col-md-3"><div class="metric-card"><div class="metric-header"><span>Qtd. Órgãos</span><i class="material-icons">domain</i></div><div class="metric-body"><div class="metric-value" id="m-org">—</div><div class="metric-sublabel">Com despesa registrada</div></div></div></div>
+  </div>
+
+  <!-- GRÁFICOS -->
+  <div class="row g-3 mb-3">
+    <div class="col-12">
+      <div class="chart-container">
+        <div class="chart-header"><div class="chart-title"><i class="material-icons" style="font-size:13px;">show_chart</i> Evolução da Despesa Anual — Empenhado × Liquidado × Pago</div></div>
+        <div class="chart-wrapper" style="height:280px;"><canvas id="chartAnual"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA VG -->
+  <div class="table-wrapper">
+    <div style="padding:10px 14px;background:#fff;border-bottom:1px solid #dee2e6;">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <span style="font-size:11px;color:#6c757d;">Total: <strong id="vg-total-reg">0</strong> registros</span>
+          <input type="text" class="form-control" id="vg-search" placeholder="Pesquisar em todos os campos..." style="width:260px;height:30px;font-size:11px;" oninput="filtrarTabelaVG()">
+        </div>
+        <div class="toolbar-right">
+          <button class="btn-export" onclick="imprimirVG()"><i class="material-icons">print</i> Imprimir</button>
+          <button class="btn-export" onclick="exportarCSV('vg')"><i class="material-icons">description</i> CSV</button>
+          <button class="btn-export" onclick="exportarPDF('vg')"><i class="material-icons">picture_as_pdf</i> PDF</button>
+        </div>
+      </div>
+    </div>
+    <div class="table-fixed">
+      <table class="table" id="tbl-vg">
+        <thead><tr>
+          <th class="sortable" onclick="sortVG('unidade_orcamentaria_codigo')">Código <i class="material-icons sort-icon">unfold_more</i></th>
+          <th class="sortable" onclick="sortVG('unidade_orcamentaria_sigla')">Sigla <i class="material-icons sort-icon">unfold_more</i></th>
+          <th class="sortable" onclick="sortVG('unidade_orcamentaria_nome')">Órgão <i class="material-icons sort-icon">unfold_more</i></th>
+          <th class="sortable text-right" onclick="sortVG('valor_despesa_empenhada')">Vl. Empenhado <i class="material-icons sort-icon">unfold_more</i></th>
+          <th class="sortable text-right" onclick="sortVG('valor_despesa_liquidada')">Vl. Liquidado <i class="material-icons sort-icon">unfold_more</i></th>
+          <th class="sortable text-right" onclick="sortVG('valor_pago_financeiro')">Vl. Pago <i class="material-icons sort-icon">unfold_more</i></th>
+          <th class="sortable text-right" onclick="sortVG('valor_despesa_liquidada_rp')">Vl. Liq. RP <i class="material-icons sort-icon">unfold_more</i></th>
+          <th class="sortable text-right" onclick="sortVG('valor_pago_rp')">Vl. Pago RP <i class="material-icons sort-icon">unfold_more</i></th>
+        </tr></thead>
+        <tbody id="tbody-vg"></tbody>
+        <tfoot><tr id="tfoot-vg">
+          <td colspan="3">TOTAL</td>
+          <td class="text-right" id="tf-vg-emp">—</td>
+          <td class="text-right" id="tf-vg-liq">—</td>
+          <td class="text-right" id="tf-vg-pag">—</td>
+          <td class="text-right" id="tf-vg-liqrp">—</td>
+          <td class="text-right" id="tf-vg-pagrp">—</td>
+        </tr></tfoot>
+      </table>
+    </div>
+    <div class="pagination-container">
+      <div class="pagination-info">
+        <div class="page-size-wrap" style="display:flex;align-items:center;gap:4px;font-size:11px;color:#6c757d;">Exibir <select class="page-size-select" onchange="pgVG.setSize(+this.value)" id="vg-page-size"><option>25</option><option selected>50</option><option>100</option><option>200</option></select> por página</div>
+        <span id="vg-page-info"></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="pagination-controls" id="vg-pagination"></div>
+        <div class="page-input-wrap">Ir para <input type="number" id="vg-goto" min="1"> <button onclick="pgVG.goTo(+document.getElementById('vg-goto').value)">Ir</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== EMPENHO/FAVORECIDO ===================== -->
+<div class="tab-pane fade" id="tab-empenho" role="tabpanel">
+  <div class="filter-container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+      <div style="flex:1;">
+        <div class="filter-label" style="margin-bottom:8px;"><i class="material-icons" style="font-size:13px;">filter_list</i> FILTROS</div>
+        <div class="filters-row">
+          <div class="filter-group"><label class="filter-label">Ano</label><select class="form-select" id="emp-ano"><option value="">Todos</option></select></div>
+          <div class="filter-group"><label class="filter-label">Período</label><select class="form-select" id="emp-periodo"><option value="">Todos</option><option>Janeiro</option><option>Fevereiro</option><option>Março</option><option>Abril</option><option>Maio</option><option>Junho</option><option>Julho</option><option>Agosto</option><option>Setembro</option><option>Outubro</option><option>Novembro</option><option>Dezembro</option></select></div>
+          <div class="filter-group"><label class="filter-label">Sigla</label><input class="form-control" id="emp-sigla" list="emp-list-sigla" placeholder="Sigla..."><datalist id="emp-list-sigla"></datalist></div>
+          <div class="filter-group"><label class="filter-label">Órgão</label><input class="form-control" id="emp-orgao" list="emp-list-orgao" placeholder="Órgão..."><datalist id="emp-list-orgao"></datalist></div>
+        </div>
+        <div class="filters-row">
+          <div class="filter-group"><label class="filter-label">Nº Empenho</label><input class="form-control" id="emp-num" placeholder="Número do empenho..."></div>
+          <div class="filter-group"><label class="filter-label">Favorecido</label><input class="form-control" id="emp-favorecido" list="emp-list-fav" placeholder="Nome do favorecido..."><datalist id="emp-list-fav"></datalist></div>
+          <div class="filter-group"><label class="filter-label">CNPJ/CPF</label><input class="form-control" id="emp-cnpj" placeholder="CNPJ ou CPF..."></div>
+          <div class="filter-group"><label class="filter-label">Modalidade Licitação</label><input class="form-control" id="emp-modalidade" list="emp-list-mod" placeholder="Modalidade..."><datalist id="emp-list-mod"></datalist></div>
+        </div>
+        <div class="filters-row">
+          <div class="filter-group"><label class="filter-label">Processo de Compra</label><input class="form-control" id="emp-processo" list="emp-list-proc" placeholder="Processo..."><datalist id="emp-list-proc"></datalist></div>
+          <div class="filter-group"><label class="filter-label">Contrato</label><input class="form-control" id="emp-contrato" placeholder="Número do contrato..."></div>
+          <div class="filter-group filter-group-auto" style="flex:0;align-self:flex-end;padding-bottom:0;">
+            <div class="botoes-abaixo" style="margin-top:0;">
+              <button class="btn-pesquisa" onclick="aplicarFiltroEmp()"><i class="material-icons">refresh</i> Atualizar Filtros</button>
+              <button class="btn-secondary-custom" onclick="limparFiltroEmp()"><i class="material-icons">filter_alt_off</i> Limpar Filtros</button>
+              <button class="btn-consulta" onclick="abrirQueryBuilder('emp')"><i class="material-icons">build</i> Monte sua Consulta</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <div style="padding:10px 14px;background:#fff;border-bottom:1px solid #dee2e6;">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <span style="font-size:11px;color:#6c757d;">Total: <strong id="emp-total-reg">0</strong> registros</span>
+          <input type="text" class="form-control" id="emp-search" placeholder="Pesquisar em qualquer campo (sem limite)..." style="width:300px;height:30px;font-size:11px;" oninput="filtrarTabelaEmp()">
+        </div>
+        <div class="toolbar-right">
+          <button class="btn-export" onclick="imprimirTabela('emp')"><i class="material-icons">print</i> Imprimir</button>
+          <button class="btn-export" onclick="exportarCSV('emp')"><i class="material-icons">description</i> CSV</button>
+          <button class="btn-export" onclick="exportarPDF('emp')"><i class="material-icons">picture_as_pdf</i> PDF</button>
+          <div class="col-sel">
+            <button class="btn-export" onclick="toggleColSel('emp-col-dropdown')"><i class="material-icons">view_column</i> Colunas</button>
+            <div class="col-sel-dropdown" id="emp-col-dropdown">
+              <div class="col-sel-hdr"><span>Colunas opcionais</span><i class="material-icons col-sel-close" onclick="toggleColSel('emp-col-dropdown')">close</i></div>
+              <div id="emp-col-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-fixed">
+      <table class="table" id="tbl-emp">
+        <thead id="thead-emp"></thead>
+        <tbody id="tbody-emp"></tbody>
+        <tfoot id="tfoot-emp"></tfoot>
+      </table>
+    </div>
+    <div class="pagination-container">
+      <div class="pagination-info">
+        <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:#6c757d;">Exibir <select class="page-size-select" onchange="pgEmp.setSize(+this.value)"><option>25</option><option selected>50</option><option>100</option><option>200</option></select> por página</div>
+        <span id="emp-page-info"></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="pagination-controls" id="emp-pagination"></div>
+        <div class="page-input-wrap">Ir para <input type="number" id="emp-goto" min="1"> <button onclick="pgEmp.goTo(+document.getElementById('emp-goto').value)">Ir</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ITENS DE DESPESA ===================== -->
+<div class="tab-pane fade" id="tab-itens" role="tabpanel">
+  <div class="filter-container">
+    <div class="filter-label" style="margin-bottom:8px;"><i class="material-icons" style="font-size:13px;">filter_list</i> FILTROS</div>
+    <div class="filters-row">
+      <div class="filter-group"><label class="filter-label">Ano</label><select class="form-select" id="it-ano"><option value="">Todos</option></select></div>
+      <div class="filter-group"><label class="filter-label">Período</label><select class="form-select" id="it-periodo"><option value="">Todos</option><option>Janeiro</option><option>Fevereiro</option><option>Março</option><option>Abril</option><option>Maio</option><option>Junho</option><option>Julho</option><option>Agosto</option><option>Setembro</option><option>Outubro</option><option>Novembro</option><option>Dezembro</option></select></div>
+      <div class="filter-group"><label class="filter-label">Sigla</label><input class="form-control" id="it-sigla" list="it-list-sigla" placeholder="Sigla..."><datalist id="it-list-sigla"></datalist></div>
+      <div class="filter-group"><label class="filter-label">Órgão</label><input class="form-control" id="it-orgao" list="it-list-orgao" placeholder="Órgão..."><datalist id="it-list-orgao"></datalist></div>
+    </div>
+    <div class="filters-row">
+      <div class="filter-group"><label class="filter-label">Cód. Item Despesa</label><input class="form-control" id="it-cod-item" list="it-list-cod-item" placeholder="Cód. item..."><datalist id="it-list-cod-item"></datalist></div>
+      <div class="filter-group"><label class="filter-label">Item Despesa</label><input class="form-control" id="it-item" list="it-list-item" placeholder="Item despesa..."><datalist id="it-list-item"></datalist></div>
+      <div class="filter-group"><label class="filter-label">Cód. Elem. Despesa</label><input class="form-control" id="it-cod-elem" list="it-list-cod-elem" placeholder="Cód. elemento..."><datalist id="it-list-cod-elem"></datalist></div>
+      <div class="filter-group"><label class="filter-label">Elemento Despesa</label><input class="form-control" id="it-elem" list="it-list-elem" placeholder="Elemento..."><datalist id="it-list-elem"></datalist></div>
+    </div>
+    <div class="botoes-abaixo">
+      <button class="btn-pesquisa" onclick="aplicarFiltroIt()"><i class="material-icons">refresh</i> Atualizar Filtros</button>
+      <button class="btn-secondary-custom" onclick="limparFiltroIt()"><i class="material-icons">filter_alt_off</i> Limpar Filtros</button>
+      <button class="btn-consulta" onclick="abrirQueryBuilder('it')"><i class="material-icons">build</i> Monte sua Consulta</button>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <div style="padding:10px 14px;background:#fff;border-bottom:1px solid #dee2e6;">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <span style="font-size:11px;color:#6c757d;">Total: <strong id="it-total-reg">0</strong> registros</span>
+          <input type="text" class="form-control" id="it-search" placeholder="Pesquisar em qualquer campo..." style="width:300px;height:30px;font-size:11px;" oninput="filtrarTabelaIt()">
+        </div>
+        <div class="toolbar-right">
+          <button class="btn-export" onclick="imprimirTabela('it')"><i class="material-icons">print</i> Imprimir</button>
+          <button class="btn-export" onclick="exportarCSV('it')"><i class="material-icons">description</i> CSV</button>
+          <button class="btn-export" onclick="exportarPDF('it')"><i class="material-icons">picture_as_pdf</i> PDF</button>
+          <div class="col-sel">
+            <button class="btn-export" onclick="toggleColSel('it-col-dropdown')"><i class="material-icons">view_column</i> Colunas</button>
+            <div class="col-sel-dropdown" id="it-col-dropdown">
+              <div class="col-sel-hdr"><span>Colunas opcionais</span><i class="material-icons col-sel-close" onclick="toggleColSel('it-col-dropdown')">close</i></div>
+              <div id="it-col-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-fixed">
+      <table class="table" id="tbl-it">
+        <thead id="thead-it"></thead>
+        <tbody id="tbody-it"></tbody>
+        <tfoot id="tfoot-it"></tfoot>
+      </table>
+    </div>
+    <div class="pagination-container">
+      <div class="pagination-info">
+        <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:#6c757d;">Exibir <select class="page-size-select" onchange="pgIt.setSize(+this.value)"><option>25</option><option selected>50</option><option>100</option><option>200</option></select> por página</div>
+        <span id="it-page-info"></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="pagination-controls" id="it-pagination"></div>
+        <div class="page-input-wrap">Ir para <input type="number" id="it-goto" min="1"> <button onclick="pgIt.goTo(+document.getElementById('it-goto').value)">Ir</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PROGRAMA ===================== -->
+<div class="tab-pane fade" id="tab-programa" role="tabpanel">
+  <div class="filter-container">
+    <div class="filter-label" style="margin-bottom:8px;"><i class="material-icons" style="font-size:13px;">filter_list</i> FILTROS</div>
+    <div class="filters-row">
+      <div class="filter-group"><label class="filter-label">Ano</label><select class="form-select" id="pg-ano"><option value="">Todos</option></select></div>
+      <div class="filter-group"><label class="filter-label">Período</label><select class="form-select" id="pg-periodo"><option value="">Todos</option><option>Janeiro</option><option>Fevereiro</option><option>Março</option><option>Abril</option><option>Maio</option><option>Junho</option><option>Julho</option><option>Agosto</option><option>Setembro</option><option>Outubro</option><option>Novembro</option><option>Dezembro</option></select></div>
+      <div class="filter-group"><label class="filter-label">Sigla</label><input class="form-control" id="pg-sigla" list="pg-list-sigla" placeholder="Sigla..."><datalist id="pg-list-sigla"></datalist></div>
+      <div class="filter-group"><label class="filter-label">Órgão</label><input class="form-control" id="pg-orgao" list="pg-list-orgao" placeholder="Órgão..."><datalist id="pg-list-orgao"></datalist></div>
+    </div>
+    <div class="filters-row">
+      <div class="filter-group"><label class="filter-label">Código Programa</label><input class="form-control" id="pg-cod-prog" list="pg-list-cod-prog" placeholder="Cód. programa..."><datalist id="pg-list-cod-prog"></datalist></div>
+      <div class="filter-group"><label class="filter-label">Programa</label><input class="form-control" id="pg-prog" list="pg-list-prog" placeholder="Programa..."><datalist id="pg-list-prog"></datalist></div>
+      <div class="filter-group"><label class="filter-label">Código Ação</label><input class="form-control" id="pg-cod-acao" list="pg-list-cod-acao" placeholder="Cód. ação..."><datalist id="pg-list-cod-acao"></datalist></div>
+      <div class="filter-group"><label class="filter-label">Ação</label><input class="form-control" id="pg-acao" list="pg-list-acao" placeholder="Ação..."><datalist id="pg-list-acao"></datalist></div>
+    </div>
+    <div class="botoes-abaixo">
+      <button class="btn-pesquisa" onclick="aplicarFiltroPg()"><i class="material-icons">refresh</i> Atualizar Filtros</button>
+      <button class="btn-secondary-custom" onclick="limparFiltroPg()"><i class="material-icons">filter_alt_off</i> Limpar Filtros</button>
+      <button class="btn-consulta" onclick="abrirQueryBuilder('pg')"><i class="material-icons">build</i> Monte sua Consulta</button>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <div style="padding:10px 14px;background:#fff;border-bottom:1px solid #dee2e6;">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <span style="font-size:11px;color:#6c757d;">Total: <strong id="pg-total-reg">0</strong> registros</span>
+          <input type="text" class="form-control" id="pg-search" placeholder="Pesquisar em qualquer campo..." style="width:300px;height:30px;font-size:11px;" oninput="filtrarTabelaPg()">
+        </div>
+        <div class="toolbar-right">
+          <button class="btn-export" onclick="imprimirTabela('pg')"><i class="material-icons">print</i> Imprimir</button>
+          <button class="btn-export" onclick="exportarCSV('pg')"><i class="material-icons">description</i> CSV</button>
+          <button class="btn-export" onclick="exportarPDF('pg')"><i class="material-icons">picture_as_pdf</i> PDF</button>
+          <div class="col-sel">
+            <button class="btn-export" onclick="toggleColSel('pg-col-dropdown')"><i class="material-icons">view_column</i> Colunas</button>
+            <div class="col-sel-dropdown" id="pg-col-dropdown">
+              <div class="col-sel-hdr"><span>Colunas opcionais</span><i class="material-icons col-sel-close" onclick="toggleColSel('pg-col-dropdown')">close</i></div>
+              <div id="pg-col-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-fixed">
+      <table class="table" id="tbl-pg">
+        <thead id="thead-pg"></thead>
+        <tbody id="tbody-pg"></tbody>
+        <tfoot id="tfoot-pg"></tfoot>
+      </table>
+    </div>
+    <div class="pagination-container">
+      <div class="pagination-info">
+        <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:#6c757d;">Exibir <select class="page-size-select" onchange="pgPg.setSize(+this.value)"><option>25</option><option selected>50</option><option>100</option><option>200</option></select> por página</div>
+        <span id="pg-page-info"></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="pagination-controls" id="pg-pagination"></div>
+        <div class="page-input-wrap">Ir para <input type="number" id="pg-goto" min="1"> <button onclick="pgPg.goTo(+document.getElementById('pg-goto').value)">Ir</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== DICIONÁRIO ===================== -->
+<div class="tab-pane fade" id="tab-dicionario" role="tabpanel">
+  <div class="dic-search-box">
+    <i class="material-icons" style="color:#1a3a5c;">search</i>
+    <input type="text" class="form-control" id="dic-search" placeholder="Pesquisar campo ou descrição..." style="max-width:350px;" oninput="filtrarDic()">
+    <button class="dic-tab-btn active" onclick="filterDicTab('all',this)">Todos</button>
+    <button class="dic-tab-btn" onclick="filterDicTab('orgao',this)">Órgão</button>
+    <button class="dic-tab-btn" onclick="filterDicTab('empenho',this)">Empenho/Favorecido</button>
+    <button class="dic-tab-btn" onclick="filterDicTab('programa',this)">Programa</button>
+  </div>
+  <div id="dic-content"></div>
+</div>
+
+<!-- ===================== DOWNLOADS ===================== -->
+<div class="tab-pane fade" id="tab-downloads" role="tabpanel">
+  <div id="downloads-content">
+    <div class="row g-3 mt-1">
+      <div class="col-md-6">
+        <div class="download-card">
+          <div class="download-card-header"><i class="material-icons">domain</i> Órgão (por ano)</div>
+          <div class="download-card-body">
+            <p style="font-size:12px;color:#64748b;margin-bottom:12px;">Despesa consolidada por unidade orçamentária e exercício. Arquivo CSV delimitado por ponto-e-vírgula.</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="dl-orgao-btns"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="download-card">
+          <div class="download-card-header"><i class="material-icons">receipt_long</i> Empenho/Favorecido (por ano)</div>
+          <div class="download-card-body">
+            <p style="font-size:12px;color:#64748b;margin-bottom:12px;">Despesa por empenho com identificação do favorecido, elemento e fonte de recurso. Arquivo CSV delimitado por ponto-e-vírgula.</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="dl-emp-btns"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="download-card">
+          <div class="download-card-header"><i class="material-icons">account_tree</i> Programa (por ano)</div>
+          <div class="download-card-body">
+            <p style="font-size:12px;color:#64748b;margin-bottom:12px;">Despesa por programa e ação orçamentária. Arquivo CSV delimitado por ponto-e-vírgula.</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="dl-prog-btns"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="download-card">
+          <div class="download-card-header"><i class="material-icons">open_in_new</i> Portal de Dados Abertos MG</div>
+          <div class="download-card-body">
+            <p style="font-size:12px;color:#64748b;margin-bottom:12px;">Acesse todos os datasets de despesa pública do Estado de Minas Gerais no Portal de Dados Abertos.</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <a href="https://dados.mg.gov.br/dataset/portal_despesa" target="_blank" class="btn-pesquisa" style="text-decoration:none;"><i class="material-icons">open_in_new</i> Portal dados.mg.gov.br</a>
+              <a href="https://dados.mg.gov.br/dataset/portal_despesa" target="_blank" class="btn-secondary-custom" style="text-decoration:none;"><i class="material-icons">search</i> Consultar Despesas</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tab-content -->
+</div><!-- /container -->
+
+<!-- QUERY BUILDER MODAL -->
+<div class="modal fade" id="qbModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content modal-creative">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="material-icons">build</i> Monte sua Consulta</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" style="padding:14px;">
+        <p style="font-size:11px;color:#64748b;margin-bottom:10px;">Arraste os campos desejados para a área de seleção ou clique no <strong>+</strong>. Depois aplique os filtros e visualize os dados.</p>
+        <div class="qb-panel" id="qb-panel">
+          <div class="qb-fields" id="qb-fields-panel">
+            <div class="qb-fields-title">Campos disponíveis</div>
+            <div id="qb-fields-list"></div>
+          </div>
+          <div class="qb-canvas">
+            <div style="font-size:11px;font-weight:700;color:#1a3a5c;margin-bottom:6px;">Campos selecionados (arraste aqui)</div>
+            <div class="qb-drop-zone" id="qb-drop-zone" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="qbDrop(event)">
+              <span id="qb-drop-hint" style="font-size:11px;color:#94a3b8;padding:4px;">Arraste campos da esquerda ou clique em + para adicionar</span>
+            </div>
+            <div style="font-size:11px;font-weight:700;color:#1a3a5c;margin-bottom:6px;">Filtros de dados</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+              <div style="flex:1;min-width:110px;">
+                <label class="filter-label">Ano</label>
+                <select class="form-select" id="qb-fil-ano" style="height:34px;font-size:11px;"><option value="">Todos</option></select>
+              </div>
+              <div style="flex:1;min-width:130px;">
+                <label class="filter-label">Nº Empenho</label>
+                <input class="form-control" id="qb-fil-empenho" placeholder="Ex: 230" style="height:34px;font-size:11px;">
+              </div>
+              <div style="flex:1;min-width:130px;">
+                <label class="filter-label">Favorecido</label>
+                <input class="form-control" id="qb-fil-favorecido" placeholder="Nome..." style="height:34px;font-size:11px;">
+              </div>
+              <div style="flex:1;min-width:130px;">
+                <label class="filter-label">Órgão / Sigla</label>
+                <input class="form-control" id="qb-fil-orgao" placeholder="Órgão ou sigla..." style="height:34px;font-size:11px;">
+              </div>
+              <div style="flex:1;min-width:130px;">
+                <label class="filter-label">Elemento Despesa</label>
+                <input class="form-control" id="qb-fil-elemento" placeholder="Elemento..." style="height:34px;font-size:11px;">
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
+              <button class="btn-pesquisa" onclick="aplicarQB()"><i class="material-icons">play_arrow</i> Exibir Dados</button>
+              <button class="btn-secondary-custom" onclick="limparQB()"><i class="material-icons">clear_all</i> Limpar</button>
+            </div>
+            <div id="qb-result-wrap" style="display:none;">
+              <div class="toolbar" style="margin-bottom:8px;">
+                <div class="toolbar-left">
+                  <span style="font-size:11px;color:#6c757d;">Total: <strong id="qb-total-reg">0</strong> registros</span>
+                  <input type="text" class="form-control" id="qb-search" placeholder="Pesquisar..." style="width:250px;height:28px;font-size:11px;" oninput="filtrarQB()">
+                </div>
+                <div class="toolbar-right">
+                  <button class="btn-export" onclick="imprimirQB()"><i class="material-icons">print</i> Imprimir</button>
+                  <button class="btn-export" onclick="exportarCSV('qb')"><i class="material-icons">description</i> CSV</button>
+                  <button class="btn-export" onclick="exportarPDF('qb')"><i class="material-icons">picture_as_pdf</i> PDF</button>
+                </div>
+              </div>
+              <div style="max-height:300px;overflow:auto;border-radius:8px;border:1px solid #dee2e6;">
+                <table class="table" id="tbl-qb">
+                  <thead id="thead-qb"></thead>
+                  <tbody id="tbody-qb"></tbody>
+                  <tfoot id="tfoot-qb"></tfoot>
+                </table>
+              </div>
+              <div class="pagination-container" style="border-radius:0 0 8px 8px;">
+                <div class="pagination-info">
+                  <div style="display:flex;align-items:center;gap:4px;font-size:11px;color:#6c757d;">Exibir <select class="page-size-select" onchange="pgQB.setSize(+this.value)"><option>25</option><option selected>50</option><option>100</option></select> por página</div>
+                  <span id="qb-page-info"></span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div class="pagination-controls" id="qb-pagination"></div>
+                  <div class="page-input-wrap">Ir para <input type="number" id="qb-goto" min="1"> <button onclick="pgQB.goTo(+document.getElementById('qb-goto').value)">Ir</button></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn-secondary-custom" data-bs-dismiss="modal"><i class="material-icons">close</i> Fechar</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETALHE EMPENHO -->
+<div class="modal fade" id="modalDetalheEmpenho" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content modal-creative">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-emp-title"><i class="material-icons">receipt_long</i> Detalhamento do Empenho</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="modal-emp-body" style="padding:16px;"></div>
+      <div class="modal-footer"><button class="btn-secondary-custom" data-bs-dismiss="modal"><i class="material-icons">close</i> Fechar</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DETALHE ITEM -->
+<div class="modal fade" id="modalDetalheItem" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content modal-creative">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-item-title"><i class="material-icons">inventory_2</i> Detalhamento do Item de Despesa</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="modal-item-body" style="padding:16px;"></div>
+      <div class="modal-footer"><button class="btn-secondary-custom" data-bs-dismiss="modal"><i class="material-icons">close</i> Fechar</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner-border" style="color:#20445d;width:2.5rem;height:2.5rem;"></div>
+  <div class="loading-text" id="loadingText">Carregando dados...</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-notif" id="toastNotif"><div class="toast-content" id="toastContent"></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ================================================================
+// CONFIG & GLOBALS
+// ================================================================
+const ANOS = [2026]; // adicionar 2023,2024,2025 quando disponíveis
+const BASE_RAW = 'https://raw.githubusercontent.com/transparencia-mg/portal_despesa/refs/heads/main/dataset/data/';
+
+const URLS = {
+  orgao: ano => [`${BASE_RAW}orgao${ano}.csv`],
+  empenho: ano => [
+    `${BASE_RAW}favorecidoempenho${ano}_1.csv`,
+    `${BASE_RAW}favorecidoempenho${ano}_2.csv`
+  ],
+  programa: ano => [`${BASE_RAW}programa${ano}.csv`]
+};
+
+let dadosOrgao = [], dadosEmpenho = [], dadosPrograma = [];
+let dadosFiltradosVG = [], dadosFiltradosEmp = [], dadosFiltradosIt = [], dadosFiltradosPg = [], dadosFiltradosQB = [];
+
+// Sort state
+let sortState = { vg: {col:'unidade_orcamentaria_nome',dir:'asc'}, emp: {col:'numero_empenho',dir:'asc'}, it: {col:'item_despesa_codigo',dir:'asc'}, pg: {col:'programa_codigo',dir:'asc'} };
+
+// QB state
+let qbCampos = [];
+let qbSource = 'emp';
+
+// Column visibility
+let colVisEmp = {}, colVisIt = {}, colVisPg = {};
+
+// Charts
+let chartAnual = null, chartDist = null;
+
+// ================================================================
+// PAGINATION CLASS
+// ================================================================
+class Paginator {
+  constructor(id, size=50) {
+    this.id = id; this.page = 1; this.size = size; this.total = 0; this.data = []; this.filtered = [];
+    this.renderFn = null;
+  }
+  setData(arr) { this.data = arr; this.filtered = arr; this.page = 1; this.update(); }
+  filter(fn) { this.filtered = fn ? this.data.filter(fn) : this.data; this.page = 1; this.update(); }
+  setSize(s) { this.size = s; this.page = 1; this.update(); }
+  goTo(p) { if(p>=1 && p<=this.pages()) { this.page=p; this.update(); } }
+  pages() { return Math.max(1, Math.ceil(this.filtered.length / this.size)); }
+  current() { const s=(this.page-1)*this.size; return this.filtered.slice(s, s+this.size); }
+  update() {
+    this.total = this.filtered.length;
+    if (this.renderFn) this.renderFn(this.current());
+    this.renderControls();
+  }
+  renderControls() {
+    const totalPg = this.pages();
+    const infoEl = document.getElementById(this.id+'-page-info');
+    if(infoEl) { const s=(this.page-1)*this.size; infoEl.textContent = `Mostrando ${s+1}–${Math.min(s+this.size,this.total)} de ${this.total}`; }
+    const ctrl = document.getElementById(this.id+'-pagination');
+    if(!ctrl) return;
+    let html = `<button ${this.page<=1?'disabled':''} onclick="pg${cap(this.id)}.goTo(${this.page-1})"><i class="material-icons" style="font-size:13px;">chevron_left</i></button>`;
+    let start = Math.max(1,this.page-2), end = Math.min(totalPg, start+4);
+    start = Math.max(1, end-4);
+    if(start>1) html+=`<button onclick="pg${cap(this.id)}.goTo(1)">1</button>`;
+    if(start>2) html+=`<button disabled>…</button>`;
+    for(let i=start;i<=end;i++) html+=`<button class="${i===this.page?'active':''}" onclick="pg${cap(this.id)}.goTo(${i})">${i}</button>`;
+    if(end<totalPg-1) html+=`<button disabled>…</button>`;
+    if(end<totalPg) html+=`<button onclick="pg${cap(this.id)}.goTo(${totalPg})">${totalPg}</button>`;
+    html += `<button ${this.page>=totalPg?'disabled':''} onclick="pg${cap(this.id)}.goTo(${this.page+1})"><i class="material-icons" style="font-size:13px;">chevron_right</i></button>`;
+    ctrl.innerHTML = html;
+  }
+}
+
+function cap(s) { return s.charAt(0).toUpperCase()+s.slice(1); }
+
+const pgVG = new Paginator('vg');
+const pgEmp = new Paginator('emp');
+const pgIt = new Paginator('it');
+const pgPg = new Paginator('pg');
+const pgQB = new Paginator('qb');
+
+// ================================================================
+// UTILS
+// ================================================================
+const fmt = n => {
+  const v = parseFloat(n)||0;
+  return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+};
+const fmtShort = n => {
+  const v = parseFloat(n)||0;
+  if(Math.abs(v)>=1e9) return 'R$ '+(v/1e9).toFixed(1)+' bi';
+  if(Math.abs(v)>=1e6) return 'R$ '+(v/1e6).toFixed(1)+' mi';
+  return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2});
+};
+const parseNum = s => { if(!s) return 0; return parseFloat(String(s).replace(',','.'))||0; };
+
+function showLoading(msg='Carregando dados...') {
+  document.getElementById('loadingText').textContent=msg;
+  document.getElementById('loadingOverlay').classList.add('show');
+}
+function hideLoading() { document.getElementById('loadingOverlay').classList.remove('show'); }
+
+function showToast(msg, type='success') {
+  const t=document.getElementById('toastNotif'), c=document.getElementById('toastContent');
+  c.innerHTML=`<i class="material-icons" style="color:${type==='success'?'#28a745':'#b93c42'}">${type==='success'?'check_circle':'error'}</i>${msg}`;
+  t.className='toast-notif '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ================================================================
+// CSV PARSER
+// ================================================================
+function parseCSV(text, delim=';') {
+  const lines = text.trim().split('\n');
+  if(!lines.length) return [];
+  const headers = lines[0].replace(/^\uFEFF/,'').split(delim).map(h=>h.trim().replace(/^"|"$/g,''));
+  return lines.slice(1).filter(l=>l.trim()).map(line => {
+    const vals = line.split(delim);
+    const obj = {};
+    headers.forEach((h,i) => { obj[h] = (vals[i]||'').trim().replace(/^"|"$/g,''); });
+    return obj;
+  });
+}
+
+async function fetchCSV(url) {
+  const resp = await fetch(url);
+  if(!resp.ok) throw new Error(`HTTP ${resp.status}: ${url}`);
+  const text = await resp.text();
+  return parseCSV(text);
+}
+
+// ================================================================
+// DATA LOADING
+// ================================================================
+async function carregarDados() {
+  showLoading('Carregando dados de órgão...');
+  try {
+    // Orgao
+    let orgRows = [];
+    for(const ano of ANOS) {
+      try {
+        showLoading(`Carregando órgão ${ano}...`);
+        const rows = await fetchCSV(URLS.orgao(ano)[0]+'?'+Date.now());
+        rows.forEach(r => { r._ano = String(ano); });
+        orgRows = orgRows.concat(rows);
+      } catch(e) { console.warn('Orgao '+ano, e); }
+    }
+    dadosOrgao = orgRows;
+
+    // Empenho (2 partes)
+    let empRows = [];
+    for(const ano of ANOS) {
+      for(const url of URLS.empenho(ano)) {
+        try {
+          showLoading(`Carregando empenho ${ano}...`);
+          const rows = await fetchCSV(url+'?'+Date.now());
+          rows.forEach(r => { r._ano = String(ano); });
+          empRows = empRows.concat(rows);
+        } catch(e) { console.warn('Empenho '+url, e); }
+      }
+    }
+    dadosEmpenho = empRows;
+
+    // Programa
+    let pgRows = [];
+    for(const ano of ANOS) {
+      try {
+        showLoading(`Carregando programa ${ano}...`);
+        const rows = await fetchCSV(URLS.programa(ano)[0]+'?'+Date.now());
+        rows.forEach(r => { r._ano = String(ano); });
+        pgRows = pgRows.concat(rows);
+      } catch(e) { console.warn('Programa '+ano, e); }
+    }
+    dadosPrograma = pgRows;
+
+    // Set update date
+    const hoje = new Date().toLocaleDateString('pt-BR');
+    document.getElementById('dataAtualizacao').textContent = hoje;
+
+    // Init filters options
+    popularFiltros();
+    popularDownloads();
+    renderDicionario();
+
+    // Init default view
+    dadosFiltradosVG = [...dadosOrgao];
+    dadosFiltradosEmp = [...dadosEmpenho];
+    dadosFiltradosIt = [...dadosEmpenho];
+    dadosFiltradosPg = [...dadosPrograma];
+
+    renderVG();
+    renderEmp();
+    renderIt();
+    renderPg();
+    renderGraficos();
+
+    hideLoading();
+    popularAnosQB();
+    showToast(`Dados carregados com sucesso! ${dadosOrgao.length} órgãos, ${dadosEmpenho.length} empenhos.`);
+  } catch(e) {
+    hideLoading();
+    showToast('Erro ao carregar dados: '+e.message, 'error');
+    console.error(e);
+  }
+}
+
+function popularFiltros() {
+  const anos = [...new Set([...dadosOrgao.map(d=>d._ano),...dadosEmpenho.map(d=>d._ano)])].sort().reverse();
+
+  // VG
+  const vgAno = document.getElementById('vg-ano');
+  anos.forEach(a => vgAno.innerHTML += `<option>${a}</option>`);
+  popularDatalist('vg-list-sigla', dadosOrgao, 'unidade_orcamentaria_sigla');
+  popularDatalist('vg-list-orgao', dadosOrgao, 'unidade_orcamentaria_nome');
+
+  // Empenho
+  const empAno = document.getElementById('emp-ano');
+  anos.forEach(a => empAno.innerHTML += `<option>${a}</option>`);
+  ['it-ano','pg-ano'].forEach(id => {
+    const el = document.getElementById(id);
+    anos.forEach(a => el.innerHTML += `<option>${a}</option>`);
+  });
+
+  popularDatalist('emp-list-sigla', dadosEmpenho, 'unidade_orcamentaria_sigla');
+  popularDatalist('emp-list-orgao', dadosEmpenho, 'unidade_orcamentaria_nome');
+  popularDatalist('emp-list-fav', dadosEmpenho, 'razao_social_credor');
+  popularDatalist('emp-list-mod', dadosEmpenho, 'licitacao_descricao_da_modalidade');
+  popularDatalist('emp-list-proc', dadosEmpenho, 'numero_processo_compra_siad');
+
+  popularDatalist('it-list-sigla', dadosEmpenho, 'unidade_orcamentaria_sigla');
+  popularDatalist('it-list-orgao', dadosEmpenho, 'unidade_orcamentaria_nome');
+  popularDatalist('it-list-cod-item', dadosEmpenho, 'item_despesa_codigo');
+  popularDatalist('it-list-item', dadosEmpenho, 'item_despesa_descricao');
+  popularDatalist('it-list-cod-elem', dadosEmpenho, 'elemento_despesa_codigo');
+  popularDatalist('it-list-elem', dadosEmpenho, 'elemento_despesa_descricao');
+
+  popularDatalist('pg-list-sigla', dadosPrograma, 'unidade_orcamentaria_sigla');
+  popularDatalist('pg-list-orgao', dadosPrograma, 'unidade_orcamentaria_nome');
+  popularDatalist('pg-list-cod-prog', dadosPrograma, 'programa_codigo');
+  popularDatalist('pg-list-prog', dadosPrograma, 'programa_descricao');
+  popularDatalist('pg-list-cod-acao', dadosPrograma, 'projeto_atividade_codigo');
+  popularDatalist('pg-list-acao', dadosPrograma, 'projeto_atividade_descricao');
+
+  // Col vis init
+  inicializarColunasEmp();
+  inicializarColunasIt();
+  inicializarColunasPg();
+}
+
+function popularDatalist(id, data, field) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  const vals = [...new Set(data.map(d=>d[field]).filter(Boolean))].sort();
+  el.innerHTML = vals.slice(0,500).map(v=>`<option value="${v}">`).join('');
+}
+
+// ================================================================
+// VISÃO GERAL
+// ================================================================
+function aplicarFiltroVG() {
+  const ano = document.getElementById('vg-ano').value;
+  const sigla = document.getElementById('vg-sigla').value.trim().toLowerCase();
+  const orgao = document.getElementById('vg-orgao').value.trim().toLowerCase();
+  dadosFiltradosVG = dadosOrgao.filter(d =>
+    (!ano || d._ano===ano) &&
+    (!sigla || (d.unidade_orcamentaria_sigla||'').toLowerCase().includes(sigla)) &&
+    (!orgao || (d.unidade_orcamentaria_nome||'').toLowerCase().includes(orgao))
+  );
+  renderVG();
+  renderGraficos();
+}
+function limparFiltroVG() {
+  ['vg-ano','vg-sigla','vg-orgao'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  dadosFiltradosVG = [...dadosOrgao];
+  renderVG(); renderGraficos();
+}
+
+function renderVG() {
+  // sort
+  const {col,dir} = sortState.vg;
+  const sorted = [...dadosFiltradosVG].sort((a,b)=>{
+    const av=a[col]||'', bv=b[col]||'';
+    const an=parseFloat(av), bn=parseFloat(bv);
+    if(!isNaN(an)&&!isNaN(bn)) return dir==='asc'?an-bn:bn-an;
+    return dir==='asc'?av.localeCompare(bv):bv.localeCompare(av);
+  });
+
+  // metrics
+  const tot = (field) => sorted.reduce((s,d)=>s+parseNum(d[field]),0);
+  document.getElementById('m-emp').textContent = fmtShort(tot('valor_despesa_empenhada'));
+  document.getElementById('m-liq').textContent = fmtShort(tot('valor_despesa_liquidada'));
+  document.getElementById('m-pag').textContent = fmtShort(tot('valor_pago_financeiro'));
+  document.getElementById('m-org').textContent = [...new Set(sorted.map(d=>d.unidade_orcamentaria_codigo))].length;
+  document.getElementById('vg-total-reg').textContent = sorted.length;
+
+  pgVG.renderFn = rows => {
+    const tbody = document.getElementById('tbody-vg');
+    if(!rows.length) { tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:20px;color:#94a3b8;">Nenhum registro encontrado.</td></tr>'; return; }
+    tbody.innerHTML = rows.map(d=>`<tr>
+      <td>${d.unidade_orcamentaria_codigo||'—'}</td>
+      <td>${d.unidade_orcamentaria_sigla||'—'}</td>
+      <td><a class="link-cell" title="Ver empenhos deste órgão" onclick="navegarParaEmpenho('${(d.unidade_orcamentaria_nome||'').replace(/'/g,"\\'")}')">${d.unidade_orcamentaria_nome||'—'}</a></td>
+      <td class="text-right">${fmt(d.valor_despesa_empenhada)}</td>
+      <td class="text-right">${fmt(d.valor_despesa_liquidada)}</td>
+      <td class="text-right">${fmt(d.valor_pago_financeiro)}</td>
+      <td class="text-right">${fmt(d.valor_despesa_liquidada_rp)}</td>
+      <td class="text-right">${fmt(d.valor_pago_rp)}</td>
+    </tr>`).join('');
+    // tfoot totals
+    const vis = pgVG.filtered;
+    document.getElementById('tf-vg-emp').textContent = fmt(vis.reduce((s,d)=>s+parseNum(d.valor_despesa_empenhada),0));
+    document.getElementById('tf-vg-liq').textContent = fmt(vis.reduce((s,d)=>s+parseNum(d.valor_despesa_liquidada),0));
+    document.getElementById('tf-vg-pag').textContent = fmt(vis.reduce((s,d)=>s+parseNum(d.valor_pago_financeiro),0));
+    document.getElementById('tf-vg-liqrp').textContent = fmt(vis.reduce((s,d)=>s+parseNum(d.valor_despesa_liquidada_rp),0));
+    document.getElementById('tf-vg-pagrp').textContent = fmt(vis.reduce((s,d)=>s+parseNum(d.valor_pago_rp),0));
+  };
+  pgVG.setData(sorted);
+}
+
+function filtrarTabelaVG() {
+  const q = document.getElementById('vg-search').value.toLowerCase();
+  pgVG.filter(q ? d=>Object.values(d).some(v=>String(v).toLowerCase().includes(q)) : null);
+}
+
+window.sortVG = function(col) {
+  const s = sortState.vg;
+  s.dir = s.col===col && s.dir==='asc' ? 'desc' : 'asc';
+  s.col = col;
+  renderVG();
+};
+
+// ================================================================
+// GRÁFICOS
+// ================================================================
+function renderGraficos() {
+  // Evolução anual: 3 linhas - Empenhado, Liquidado, Pago
+  const porAno = {};
+  ANOS.forEach(a => { porAno[String(a)]={emp:0,liq:0,pag:0}; });
+  dadosFiltradosVG.forEach(d => {
+    const a = String(d._ano||d.ano_de_exercicio||'');
+    if(!porAno[a]) porAno[a]={emp:0,liq:0,pag:0};
+    porAno[a].emp += parseNum(d.valor_despesa_empenhada);
+    porAno[a].liq += parseNum(d.valor_despesa_liquidada);
+    porAno[a].pag += parseNum(d.valor_pago_financeiro);
+  });
+  const anosKeys = Object.keys(porAno).sort();
+
+  const ctx1 = document.getElementById('chartAnual');
+  if(chartAnual) chartAnual.destroy();
+  chartAnual = new Chart(ctx1, {
+    type:'line',
+    data:{
+      labels: anosKeys,
+      datasets:[
+        {label:'Valor Empenhado',data:anosKeys.map(a=>porAno[a].emp),borderColor:'#1a3a5c',backgroundColor:'rgba(26,58,92,0.08)',borderWidth:2.5,pointRadius:5,pointHoverRadius:7,tension:0.3,fill:true},
+        {label:'Valor Liquidado',data:anosKeys.map(a=>porAno[a].liq),borderColor:'#b93c42',backgroundColor:'rgba(185,60,66,0.07)',borderWidth:2.5,pointRadius:5,pointHoverRadius:7,tension:0.3,fill:true},
+        {label:'Valor Pago',data:anosKeys.map(a=>porAno[a].pag),borderColor:'#28a745',backgroundColor:'rgba(40,167,69,0.07)',borderWidth:2.5,pointRadius:5,pointHoverRadius:7,tension:0.3,fill:true}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{labels:{font:{size:11,family:'Montserrat'},boxWidth:14,padding:16},position:'top'},
+        tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmtShort(ctx.parsed.y)}}
+      },
+      scales:{
+        y:{ticks:{callback:v=>fmtShort(v),font:{size:10}},grid:{color:'rgba(0,0,0,0.05)'},beginAtZero:true},
+        x:{ticks:{font:{size:11}},grid:{display:false}}
+      }
+    }
+  });
+}
+
+// ================================================================
+// EMPENHO / FAVORECIDO
+// ================================================================
+const EMP_COLS = [
+  {key:'numero_empenho',label:'Empenho',fixed:true},
+  {key:'data_registro_doc_empenho',label:'Data do Registro',fixed:true},
+  {key:'razao_social_credor',label:'Favorecido',fixed:true},
+  {key:'cnpj_cpf_credor_formatado',label:'CNPJ/CPF',fixed:true},
+  {key:'unidade_orcamentaria_codigo',label:'Código',fixed:false},
+  {key:'unidade_orcamentaria_sigla',label:'Sigla',fixed:false},
+  {key:'unidade_orcamentaria_nome',label:'Órgão',fixed:true},
+  {key:'numero_processo_compra_siad',label:'Processo de Compra',fixed:true},
+  {key:'licitacao_descricao_da_modalidade',label:'Modalidade Licitação',fixed:true},
+  {key:'_contrato',label:'Contrato',fixed:true},
+  {key:'elemento_despesa_codigo',label:'Cód. Elem. Despesa',fixed:false},
+  {key:'elemento_despesa_descricao',label:'Elemento Despesa',fixed:false},
+  {key:'item_despesa_codigo',label:'Cód. Item Despesa',fixed:true},
+  {key:'item_despesa_descricao',label:'Item Despesa',fixed:true},
+  {key:'fonte_recurso_codigo',label:'Cód. Fonte Recurso',fixed:false},
+  {key:'fonte_recurso_descricao',label:'Fonte de Recurso',fixed:false},
+  {key:'valor_despesa_empenhada',label:'Vl. Empenhado',fixed:true,num:true},
+  {key:'valor_despesa_liquidada',label:'Vl. Liquidado',fixed:true,num:true},
+  {key:'valor_pago_financeiro',label:'Vl. Pago',fixed:true,num:true},
+  {key:'valor_despesa_liquidada_rp',label:'Vl. Liq. RP',fixed:true,num:true},
+  {key:'valor_pago_rp',label:'Vl. Pago RP',fixed:true,num:true}
+];
+
+function inicializarColunasEmp() {
+  EMP_COLS.forEach(c => { colVisEmp[c.key] = c.fixed || false; if(c.fixed) colVisEmp[c.key]=true; });
+  // optional cols default visible
+  ['unidade_orcamentaria_codigo','unidade_orcamentaria_sigla','elemento_despesa_codigo','elemento_despesa_descricao','fonte_recurso_codigo','fonte_recurso_descricao'].forEach(k=>colVisEmp[k]=false);
+  renderColSel('emp-col-list', EMP_COLS, colVisEmp, ()=>renderEmp());
+}
+
+function renderColSel(containerId, cols, visObj, callback) {
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  // Proibido remover: colunas de valor (num:true) e numero_empenho
+  const LOCKED_KEYS = ['numero_empenho','valor_despesa_empenhada','valor_despesa_liquidada','valor_pago_financeiro','valor_despesa_liquidada_rp','valor_pago_rp'];
+  // Mostrar TODAS as colunas (fixas e opcionais), exceto as locked
+  const toShow = cols.filter(c=>!LOCKED_KEYS.includes(c.key));
+  el.innerHTML = toShow.map(c=>`
+    <div class="col-sel-item">
+      <input type="checkbox" id="col-${containerId}-${c.key}" ${visObj[c.key]?'checked':''} onchange="toggleCol('${containerId}','${c.key}',this.checked)">
+      <label for="col-${containerId}-${c.key}">${c.label}</label>
+    </div>`).join('');
+  el._cb = callback;
+}
+
+window.toggleCol = function(containerId, key, checked) {
+  if(containerId==='emp-col-list') { colVisEmp[key]=checked; renderEmp(); }
+  else if(containerId==='it-col-list') { colVisIt[key]=checked; renderIt(); }
+  else if(containerId==='pg-col-list') { colVisPg[key]=checked; renderPg(); }
+};
+
+function aplicarFiltroEmp() {
+  const ano = document.getElementById('emp-ano').value;
+  const sigla = g('emp-sigla').toLowerCase();
+  const orgao = g('emp-orgao').toLowerCase();
+  const num = g('emp-num').toLowerCase();
+  const fav = g('emp-favorecido').toLowerCase();
+  const cnpj = g('emp-cnpj').toLowerCase();
+  const mod = g('emp-modalidade').toLowerCase();
+  const proc = g('emp-processo').toLowerCase();
+  const cont = g('emp-contrato').toLowerCase();
+
+  dadosFiltradosEmp = dadosEmpenho.filter(d =>
+    (!ano || d._ano===ano) &&
+    (!sigla || (d.unidade_orcamentaria_sigla||'').toLowerCase().includes(sigla)) &&
+    (!orgao || (d.unidade_orcamentaria_nome||'').toLowerCase().includes(orgao)) &&
+    (!num || (d.numero_empenho||'').toLowerCase().includes(num)) &&
+    (!fav || (d.razao_social_credor||'').toLowerCase().includes(fav)) &&
+    (!cnpj || (d.cnpj_cpf_credor_formatado||'').toLowerCase().includes(cnpj)) &&
+    (!mod || (d.licitacao_descricao_da_modalidade||'').toLowerCase().includes(mod)) &&
+    (!proc || (d.numero_processo_compra_siad||'').toLowerCase().includes(proc)) &&
+    (!cont || (d._contrato||'').toLowerCase().includes(cont))
+  );
+  renderEmp();
+}
+function limparFiltroEmp() {
+  ['emp-ano','emp-sigla','emp-orgao','emp-num','emp-favorecido','emp-cnpj','emp-modalidade','emp-processo','emp-contrato'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  dadosFiltradosEmp = [...dadosEmpenho];
+  renderEmp();
+}
+
+function renderEmp() {
+  const visCols = EMP_COLS.filter(c=>colVisEmp[c.key]);
+  const thead = document.getElementById('thead-emp');
+  const tfoot = document.getElementById('tfoot-emp');
+  thead.innerHTML = '<tr>'+visCols.map(c=>`<th class="sortable${c.num?' text-right':''}" onclick="sortTabela('emp','${c.key}')">${c.label} <i class="material-icons sort-icon">unfold_more</i></th>`).join('')+'</tr>';
+
+  const {col,dir} = sortState.emp;
+  const sorted = [...dadosFiltradosEmp].sort((a,b)=>{
+    const av=a[col]||'', bv=b[col]||'';
+    const an=parseFloat(av), bn=parseFloat(bv);
+    if(!isNaN(an)&&!isNaN(bn)) return dir==='asc'?an-bn:bn-an;
+    return dir==='asc'?av.localeCompare(bv):bv.localeCompare(av);
+  });
+  document.getElementById('emp-total-reg').textContent = sorted.length;
+
+  pgEmp.renderFn = rows => {
+    const tbody = document.getElementById('tbody-emp');
+    if(!rows.length){tbody.innerHTML='<tr><td colspan="'+visCols.length+'" style="text-align:center;padding:20px;color:#94a3b8;">Nenhum registro encontrado.</td></tr>';return;}
+    tbody.innerHTML = rows.map(d=>'<tr>'+visCols.map(c=>{
+      if(c.key==='numero_empenho') return `<td><a class="link-cell" onclick="abrirDetalheEmpenho(${JSON.stringify(JSON.stringify(d))})">${d[c.key]||'—'}</a></td>`;
+      if(c.key==='data_registro_doc_empenho') { const dt=(d[c.key]||'').split('T')[0].split(' ')[0]; const pts=dt.split('-'); const fmt2=pts.length===3?pts[2]+'/'+pts[1]+'/'+pts[0]:dt; return `<td>${fmt2||'—'}</td>`; }
+      return `<td class="${c.num?'text-right':''}">${c.num?fmt(d[c.key]):(d[c.key]||'—')}</td>`;
+    }).join('')+'</tr>').join('');
+    // totals
+    const numCols = visCols.filter(c=>c.num);
+    const vis = pgEmp.filtered;
+    tfoot.innerHTML='<tr><td colspan="'+(visCols.length-numCols.length)+'">TOTAL</td>'+numCols.map(c=>`<td class="text-right">${fmt(vis.reduce((s,d)=>s+parseNum(d[c.key]),0))}</td>`).join('')+'</tr>';
+  };
+  pgEmp.setData(sorted);
+}
+
+function filtrarTabelaEmp() {
+  const q = document.getElementById('emp-search').value.toLowerCase();
+  pgEmp.filter(q ? d=>Object.values(d).some(v=>String(v).toLowerCase().includes(q)) : null);
+}
+
+// ================================================================
+// ITENS DE DESPESA
+// ================================================================
+const IT_COLS = [
+  {key:'item_despesa_codigo',label:'Cód. Item Despesa',fixed:true},
+  {key:'item_despesa_descricao',label:'Item Despesa',fixed:true},
+  {key:'elemento_despesa_codigo',label:'Cód. Elem. Despesa',fixed:false},
+  {key:'elemento_despesa_descricao',label:'Elemento Despesa',fixed:false},
+  {key:'unidade_orcamentaria_codigo',label:'Código',fixed:false},
+  {key:'unidade_orcamentaria_nome',label:'Órgão',fixed:true},
+  {key:'numero_processo_compra_siad',label:'Processo de Compra',fixed:false},
+  {key:'licitacao_descricao_da_modalidade',label:'Modalidade Licitação',fixed:false},
+  {key:'_contrato',label:'Contrato',fixed:false},
+  {key:'valor_despesa_empenhada',label:'Vl. Empenhado',fixed:true,num:true},
+  {key:'valor_despesa_liquidada',label:'Vl. Liquidado',fixed:true,num:true},
+  {key:'valor_pago_financeiro',label:'Vl. Pago',fixed:true,num:true},
+  {key:'valor_despesa_liquidada_rp',label:'Vl. Liq. RP',fixed:true,num:true},
+  {key:'valor_pago_rp',label:'Vl. Pago RP',fixed:true,num:true}
+];
+
+function inicializarColunasIt() {
+  IT_COLS.forEach(c=>{ colVisIt[c.key]=c.fixed; });
+  renderColSel('it-col-list', IT_COLS, colVisIt, ()=>renderIt());
+}
+
+function agruparItens(data) {
+  const map = {};
+  data.forEach(d => {
+    const k = `${d.item_despesa_codigo}||${d.unidade_orcamentaria_nome}`;
+    if(!map[k]) map[k] = {...d, valor_despesa_empenhada:0, valor_despesa_liquidada:0, valor_pago_financeiro:0, valor_despesa_liquidada_rp:0, valor_pago_rp:0};
+    map[k].valor_despesa_empenhada += parseNum(d.valor_despesa_empenhada);
+    map[k].valor_despesa_liquidada += parseNum(d.valor_despesa_liquidada);
+    map[k].valor_pago_financeiro += parseNum(d.valor_pago_financeiro);
+    map[k].valor_despesa_liquidada_rp += parseNum(d.valor_despesa_liquidada_rp);
+    map[k].valor_pago_rp += parseNum(d.valor_pago_rp);
+  });
+  return Object.values(map);
+}
+
+function aplicarFiltroIt() {
+  const ano = document.getElementById('it-ano').value;
+  const sigla = g('it-sigla').toLowerCase();
+  const orgao = g('it-orgao').toLowerCase();
+  const codItem = g('it-cod-item').toLowerCase();
+  const item = g('it-item').toLowerCase();
+  const codElem = g('it-cod-elem').toLowerCase();
+  const elem = g('it-elem').toLowerCase();
+
+  const filtered = dadosEmpenho.filter(d =>
+    (!ano || d._ano===ano) &&
+    (!sigla || (d.unidade_orcamentaria_sigla||'').toLowerCase().includes(sigla)) &&
+    (!orgao || (d.unidade_orcamentaria_nome||'').toLowerCase().includes(orgao)) &&
+    (!codItem || (d.item_despesa_codigo||'').toLowerCase().includes(codItem)) &&
+    (!item || (d.item_despesa_descricao||'').toLowerCase().includes(item)) &&
+    (!codElem || (d.elemento_despesa_codigo||'').toLowerCase().includes(codElem)) &&
+    (!elem || (d.elemento_despesa_descricao||'').toLowerCase().includes(elem))
+  );
+  dadosFiltradosIt = agruparItens(filtered);
+  renderIt();
+}
+function limparFiltroIt() {
+  ['it-ano','it-sigla','it-orgao','it-cod-item','it-item','it-cod-elem','it-elem'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  dadosFiltradosIt = agruparItens(dadosEmpenho);
+  renderIt();
+}
+
+function renderIt() {
+  const visCols = IT_COLS.filter(c=>colVisIt[c.key]);
+  const thead = document.getElementById('thead-it');
+  const tfoot = document.getElementById('tfoot-it');
+  thead.innerHTML='<tr>'+visCols.map(c=>`<th class="sortable${c.num?' text-right':''}" onclick="sortTabela('it','${c.key}')">${c.label} <i class="material-icons sort-icon">unfold_more</i></th>`).join('')+'</tr>';
+
+  const {col,dir} = sortState.it;
+  const sorted = [...dadosFiltradosIt].sort((a,b)=>{
+    const av=a[col]||'', bv=b[col]||'';
+    const an=parseFloat(av), bn=parseFloat(bv);
+    if(!isNaN(an)&&!isNaN(bn)) return dir==='asc'?an-bn:bn-an;
+    return dir==='asc'?av.localeCompare(bv):bv.localeCompare(av);
+  });
+  document.getElementById('it-total-reg').textContent = sorted.length;
+
+  pgIt.renderFn = rows => {
+    const tbody = document.getElementById('tbody-it');
+    if(!rows.length){tbody.innerHTML='<tr><td colspan="'+visCols.length+'" style="text-align:center;padding:20px;color:#94a3b8;">Nenhum registro encontrado.</td></tr>';return;}
+    tbody.innerHTML = rows.map(d=>'<tr>'+visCols.map(c=>{
+      if(c.key==='numero_empenho') return `<td><a class="link-cell" onclick="abrirDetalheEmpenho(${JSON.stringify(JSON.stringify(d))})">${d[c.key]||'—'}</a></td>`;
+      if(c.key==='data_registro_doc_empenho') { const dt=(d[c.key]||'').split('T')[0].split(' ')[0]; const pts=dt.split('-'); const fmt2=pts.length===3?pts[2]+'/'+pts[1]+'/'+pts[0]:dt; return `<td>${fmt2||'—'}</td>`; }
+      return `<td class="${c.num?'text-right':''}">${c.num?fmt(d[c.key]):(d[c.key]||'—')}</td>`;
+    }).join('')+'</tr>').join('');
+    const numCols = visCols.filter(c=>c.num);
+    const vis = pgIt.filtered;
+    tfoot.innerHTML='<tr><td colspan="'+(visCols.length-numCols.length)+'">TOTAL</td>'+numCols.map(c=>`<td class="text-right">${fmt(vis.reduce((s,d)=>s+parseNum(d[c.key]),0))}</td>`).join('')+'</tr>';
+  };
+  pgIt.setData(sorted);
+}
+
+function filtrarTabelaIt() {
+  const q = document.getElementById('it-search').value.toLowerCase();
+  pgIt.filter(q ? d=>Object.values(d).some(v=>String(v).toLowerCase().includes(q)) : null);
+}
+
+// ================================================================
+// PROGRAMA
+// ================================================================
+const PG_COLS = [
+  {key:'programa_codigo',label:'Código Programa',fixed:true},
+  {key:'programa_descricao',label:'Programa',fixed:true},
+  {key:'projeto_atividade_codigo',label:'Código Ação',fixed:true},
+  {key:'projeto_atividade_descricao',label:'Ação',fixed:true},
+  {key:'unidade_orcamentaria_sigla',label:'Sigla',fixed:false},
+  {key:'unidade_orcamentaria_codigo',label:'Código',fixed:false},
+  {key:'unidade_orcamentaria_nome',label:'Órgão',fixed:true},
+  {key:'valor_despesa_empenhada',label:'Vl. Empenhado',fixed:true,num:true},
+  {key:'valor_despesa_liquidada',label:'Vl. Liquidado',fixed:true,num:true},
+  {key:'valor_pago_financeiro',label:'Vl. Pago',fixed:true,num:true},
+  {key:'valor_despesa_liquidada_rp',label:'Vl. Liq. RP',fixed:true,num:true},
+  {key:'valor_pago_rp',label:'Vl. Pago RP',fixed:true,num:true}
+];
+
+function inicializarColunasPg() {
+  PG_COLS.forEach(c=>{ colVisPg[c.key]=c.fixed; });
+  renderColSel('pg-col-list', PG_COLS, colVisPg, ()=>renderPg());
+}
+
+function aplicarFiltroPg() {
+  const ano = document.getElementById('pg-ano').value;
+  const sigla = g('pg-sigla').toLowerCase();
+  const orgao = g('pg-orgao').toLowerCase();
+  const codProg = g('pg-cod-prog').toLowerCase();
+  const prog = g('pg-prog').toLowerCase();
+  const codAcao = g('pg-cod-acao').toLowerCase();
+  const acao = g('pg-acao').toLowerCase();
+
+  dadosFiltradosPg = dadosPrograma.filter(d =>
+    (!ano || d._ano===ano) &&
+    (!sigla || (d.unidade_orcamentaria_sigla||'').toLowerCase().includes(sigla)) &&
+    (!orgao || (d.unidade_orcamentaria_nome||'').toLowerCase().includes(orgao)) &&
+    (!codProg || (d.programa_codigo||'').toLowerCase().includes(codProg)) &&
+    (!prog || (d.programa_descricao||'').toLowerCase().includes(prog)) &&
+    (!codAcao || (d.projeto_atividade_codigo||'').toLowerCase().includes(codAcao)) &&
+    (!acao || (d.projeto_atividade_descricao||'').toLowerCase().includes(acao))
+  );
+  renderPg();
+}
+function limparFiltroPg() {
+  ['pg-ano','pg-sigla','pg-orgao','pg-cod-prog','pg-prog','pg-cod-acao','pg-acao'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  dadosFiltradosPg = [...dadosPrograma];
+  renderPg();
+}
+
+function renderPg() {
+  const visCols = PG_COLS.filter(c=>colVisPg[c.key]);
+  const thead = document.getElementById('thead-pg');
+  const tfoot = document.getElementById('tfoot-pg');
+  thead.innerHTML='<tr>'+visCols.map(c=>`<th class="sortable${c.num?' text-right':''}" onclick="sortTabela('pg','${c.key}')">${c.label} <i class="material-icons sort-icon">unfold_more</i></th>`).join('')+'</tr>';
+
+  const {col,dir} = sortState.pg;
+  const sorted = [...dadosFiltradosPg].sort((a,b)=>{
+    const av=a[col]||'', bv=b[col]||'';
+    const an=parseFloat(av), bn=parseFloat(bv);
+    if(!isNaN(an)&&!isNaN(bn)) return dir==='asc'?an-bn:bn-an;
+    return dir==='asc'?av.localeCompare(bv):bv.localeCompare(av);
+  });
+  document.getElementById('pg-total-reg').textContent = sorted.length;
+
+  pgPg.renderFn = rows => {
+    const tbody = document.getElementById('tbody-pg');
+    if(!rows.length){tbody.innerHTML='<tr><td colspan="'+visCols.length+'" style="text-align:center;padding:20px;color:#94a3b8;">Nenhum registro encontrado.</td></tr>';return;}
+    tbody.innerHTML = rows.map(d=>'<tr>'+visCols.map(c=>{
+      if(c.key==='numero_empenho') return `<td><a class="link-cell" onclick="abrirDetalheEmpenho(${JSON.stringify(JSON.stringify(d))})">${d[c.key]||'—'}</a></td>`;
+      if(c.key==='data_registro_doc_empenho') { const dt=(d[c.key]||'').split('T')[0].split(' ')[0]; const pts=dt.split('-'); const fmt2=pts.length===3?pts[2]+'/'+pts[1]+'/'+pts[0]:dt; return `<td>${fmt2||'—'}</td>`; }
+      return `<td class="${c.num?'text-right':''}">${c.num?fmt(d[c.key]):(d[c.key]||'—')}</td>`;
+    }).join('')+'</tr>').join('');
+    const numCols = visCols.filter(c=>c.num);
+    const vis = pgPg.filtered;
+    tfoot.innerHTML='<tr><td colspan="'+(visCols.length-numCols.length)+'">TOTAL</td>'+numCols.map(c=>`<td class="text-right">${fmt(vis.reduce((s,d)=>s+parseNum(d[c.key]),0))}</td>`).join('')+'</tr>';
+  };
+  pgPg.setData(sorted);
+}
+
+function filtrarTabelaPg() {
+  const q = document.getElementById('pg-search').value.toLowerCase();
+  pgPg.filter(q ? d=>Object.values(d).some(v=>String(v).toLowerCase().includes(q)) : null);
+}
+
+// ================================================================
+// SORT GENERIC
+// ================================================================
+window.sortTabela = function(tab, col) {
+  const s = sortState[tab];
+  s.dir = s.col===col && s.dir==='asc' ? 'desc' : 'asc';
+  s.col = col;
+  if(tab==='emp') renderEmp();
+  else if(tab==='it') renderIt();
+  else if(tab==='pg') renderPg();
+};
+
+function g(id) { const el=document.getElementById(id); return el?el.value.trim():''; }
+
+// ================================================================
+// QUERY BUILDER
+// ================================================================
+const QB_ALL_FIELDS = [
+  {group:'Identificação', fields:[
+    {key:'numero_empenho',label:'Nº Empenho'},
+    {key:'data_registro_doc_empenho',label:'Data Registro'},
+    {key:'unidade_orcamentaria_codigo',label:'Código UO'},
+    {key:'unidade_orcamentaria_sigla',label:'Sigla'},
+    {key:'unidade_orcamentaria_nome',label:'Órgão'},
+  ]},
+  {group:'Favorecido', fields:[
+    {key:'razao_social_credor',label:'Favorecido'},
+    {key:'cnpj_cpf_credor_formatado',label:'CNPJ/CPF'},
+  ]},
+  {group:'Licitação/Compra', fields:[
+    {key:'numero_processo_compra_siad',label:'Processo Compra'},
+    {key:'licitacao_descricao_da_modalidade',label:'Modalidade'},
+    {key:'_contrato',label:'Contrato'},
+  ]},
+  {group:'Elemento/Item', fields:[
+    {key:'elemento_despesa_codigo',label:'Cód. Elemento'},
+    {key:'elemento_despesa_descricao',label:'Elemento Despesa'},
+    {key:'item_despesa_codigo',label:'Cód. Item'},
+    {key:'item_despesa_descricao',label:'Item Despesa'},
+    {key:'fonte_recurso_codigo',label:'Cód. Fonte'},
+    {key:'fonte_recurso_descricao',label:'Fonte Recurso'},
+  ]},
+  {group:'Valores', fields:[
+    {key:'valor_despesa_empenhada',label:'Vl. Empenhado',num:true},
+    {key:'valor_despesa_liquidada',label:'Vl. Liquidado',num:true},
+    {key:'valor_pago_financeiro',label:'Vl. Pago',num:true},
+    {key:'valor_despesa_liquidada_rp',label:'Vl. Liq. RP',num:true},
+    {key:'valor_pago_rp',label:'Vl. Pago RP',num:true},
+  ]}
+];
+
+window.abrirQueryBuilder = function(src) {
+  qbSource = src;
+  renderQBFields();
+  new bootstrap.Modal(document.getElementById('qbModal')).show();
+};
+
+function renderQBFields() {
+  const el = document.getElementById('qb-fields-list');
+  el.innerHTML = QB_ALL_FIELDS.map(g=>`
+    <div>
+      <div class="qb-group-title" onclick="this.nextElementSibling.classList.toggle('open')">
+        ${g.group} <i class="material-icons" style="font-size:12px;">expand_more</i>
+      </div>
+      <div class="qb-group-items open">
+        ${g.fields.map(f=>`
+          <div class="qb-field-item" draggable="true" data-key="${f.key}" data-label="${f.label}" data-num="${f.num||false}"
+               ondragstart="qbDragStart(event)" >
+            <span>${f.label}</span>
+            <i class="material-icons" style="font-size:12px;cursor:pointer;" onclick="qbAddField('${f.key}','${f.label}',${f.num||false})">add</i>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+window.qbDragStart = function(e) {
+  const el = e.currentTarget;
+  e.dataTransfer.setData('key', el.dataset.key);
+  e.dataTransfer.setData('label', el.dataset.label);
+  e.dataTransfer.setData('num', el.dataset.num);
+};
+
+window.qbDrop = function(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('dragover');
+  const key = e.dataTransfer.getData('key');
+  const label = e.dataTransfer.getData('label');
+  const num = e.dataTransfer.getData('num')==='true';
+  qbAddField(key, label, num);
+};
+
+window.qbAddField = function(key, label, num) {
+  if(qbCampos.find(c=>c.key===key)) return;
+  qbCampos.push({key,label,num});
+  renderQBChips();
+};
+
+function renderQBChips() {
+  const zone = document.getElementById('qb-drop-zone');
+  const hint = document.getElementById('qb-drop-hint');
+  if(qbCampos.length) {
+    hint.style.display='none';
+    zone.innerHTML = qbCampos.map(c=>`
+      <span class="qb-chip">${c.label}
+        <i class="material-icons remove" onclick="qbRemoveField('${c.key}')">close</i>
+      </span>`).join('') + `<span id="qb-drop-hint" style="display:none;"></span>`;
+  } else {
+    zone.innerHTML = '';
+    zone.appendChild(hint);
+    hint.style.display='';
+  }
+}
+
+window.qbRemoveField = function(key) {
+  qbCampos = qbCampos.filter(c=>c.key!==key);
+  renderQBChips();
+};
+
+window.limparQB = function() {
+  qbCampos = [];
+  renderQBChips();
+  ['qb-fil-ano','qb-fil-empenho','qb-fil-favorecido','qb-fil-orgao','qb-fil-elemento'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('qb-result-wrap').style.display='none';
+};
+
+window.aplicarQB = function() {
+  if(!qbCampos.length) { showToast('Selecione ao menos um campo.','error'); return; }
+  const src = qbSource==='pg' ? dadosPrograma : dadosEmpenho;
+  const qbAno = (document.getElementById('qb-fil-ano')?.value||'').trim();
+  const qbEmp = (document.getElementById('qb-fil-empenho')?.value||'').trim().toLowerCase();
+  const qbFav = (document.getElementById('qb-fil-favorecido')?.value||'').trim().toLowerCase();
+  const qbOrg = (document.getElementById('qb-fil-orgao')?.value||'').trim().toLowerCase();
+  const qbElem = (document.getElementById('qb-fil-elemento')?.value||'').trim().toLowerCase();
+  dadosFiltradosQB = src.filter(d =>
+    (!qbAno || d._ano===qbAno) &&
+    (!qbEmp || (d.numero_empenho||'').toLowerCase().includes(qbEmp)) &&
+    (!qbFav || (d.razao_social_credor||'').toLowerCase().includes(qbFav)) &&
+    (!qbOrg || (d.unidade_orcamentaria_nome||'').toLowerCase().includes(qbOrg) || (d.unidade_orcamentaria_sigla||'').toLowerCase().includes(qbOrg)) &&
+    (!qbElem || (d.elemento_despesa_descricao||'').toLowerCase().includes(qbElem) || (d.elemento_despesa_codigo||'').toLowerCase().includes(qbElem))
+  );
+  document.getElementById('qb-total-reg').textContent = dadosFiltradosQB.length;
+
+  const thead = document.getElementById('thead-qb');
+  const tfoot = document.getElementById('tfoot-qb');
+  thead.innerHTML='<tr>'+qbCampos.map(c=>`<th class="${c.num?'text-right':''}">${c.label}</th>`).join('')+'</tr>';
+
+  pgQB.renderFn = rows => {
+    const tbody = document.getElementById('tbody-qb');
+    if(!rows.length){tbody.innerHTML='<tr><td colspan="'+qbCampos.length+'" style="text-align:center;padding:20px;color:#94a3b8;">Sem dados.</td></tr>';return;}
+    tbody.innerHTML = rows.map(d=>'<tr>'+qbCampos.map(c=>`<td class="${c.num?'text-right':''}">${c.num?fmt(d[c.key]):(d[c.key]||'—')}</td>`).join('')+'</tr>').join('');
+    const numCols = qbCampos.filter(c=>c.num);
+    const vis = pgQB.filtered;
+    if(numCols.length) tfoot.innerHTML='<tr><td colspan="'+(qbCampos.length-numCols.length)+'">TOTAL</td>'+numCols.map(c=>`<td class="text-right">${fmt(vis.reduce((s,d)=>s+parseNum(d[c.key]),0))}</td>`).join('')+'</tr>';
+  };
+  pgQB.setData(dadosFiltradosQB);
+  document.getElementById('qb-result-wrap').style.display='block';
+};
+
+window.filtrarQB = function() {
+  const q = document.getElementById('qb-search').value.toLowerCase();
+  pgQB.filter(q ? d=>qbCampos.some(c=>String(d[c.key]||'').toLowerCase().includes(q)) : null);
+};
+
+// ================================================================
+// DICIONÁRIO
+// ================================================================
+const DIC_DATA = [
+  {tabela:'orgao',fonte:'orgaoANO.csv',campo:'ano_de_exercicio',tipo:'Texto',desc:'Ano de exercício orçamentário',exemplo:'2026'},
+  {tabela:'orgao',fonte:'orgaoANO.csv',campo:'unidade_orcamentaria_codigo',tipo:'Texto',desc:'Código da unidade orçamentária',exemplo:'1201'},
+  {tabela:'orgao',fonte:'orgaoANO.csv',campo:'unidade_orcamentaria_sigla',tipo:'Texto',desc:'Sigla da unidade orçamentária',exemplo:'AGE'},
+  {tabela:'orgao',fonte:'orgaoANO.csv',campo:'unidade_orcamentaria_nome',tipo:'Texto',desc:'Nome completo da unidade orçamentária',exemplo:'Advocacia Geral do Estado'},
+  {tabela:'orgao',fonte:'orgaoANO.csv',campo:'valor_despesa_empenhada',tipo:'Numérico',desc:'Valor total empenhado no exercício (R$)',exemplo:'150000000.00'},
+  {tabela:'orgao',fonte:'orgaoANO.csv',campo:'valor_despesa_liquidada',tipo:'Numérico',desc:'Valor total liquidado no exercício (R$)',exemplo:'120000000.00'},
+  {tabela:'orgao',fonte:'orgaoANO.csv',campo:'valor_pago_financeiro',tipo:'Numérico',desc:'Valor total pago financeiramente (R$)',exemplo:'110000000.00'},
+  {tabela:'orgao',fonte:'orgaoANO.csv',campo:'valor_despesa_liquidada_rp',tipo:'Numérico',desc:'Valor liquidado de Restos a Pagar (R$)',exemplo:'5000000.00'},
+  {tabela:'orgao',fonte:'orgaoANO.csv',campo:'valor_pago_rp',tipo:'Numérico',desc:'Valor pago de Restos a Pagar (R$)',exemplo:'4500000.00'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'numero_empenho',tipo:'Texto',desc:'Número identificador do empenho',exemplo:'1234567890'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'data_registro_doc_empenho',tipo:'Data',desc:'Data de registro do documento de empenho',exemplo:'2026-01-15'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'razao_social_credor',tipo:'Texto',desc:'Razão social ou nome do credor/favorecido',exemplo:'Empresa X Ltda.'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'cnpj_cpf_credor_formatado',tipo:'Texto',desc:'CNPJ ou CPF do favorecido formatado',exemplo:'12.345.678/0001-99'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'unidade_orcamentaria_codigo',tipo:'Texto',desc:'Código da unidade orçamentária',exemplo:'1201'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'unidade_orcamentaria_sigla',tipo:'Texto',desc:'Sigla da unidade orçamentária',exemplo:'AGE'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'unidade_orcamentaria_nome',tipo:'Texto',desc:'Nome da unidade orçamentária',exemplo:'Advocacia Geral do Estado'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'numero_processo_compra_siad',tipo:'Texto',desc:'Número do processo de compra no SIAD',exemplo:'1420000038342023'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'licitacao_descricao_da_modalidade',tipo:'Texto',desc:'Modalidade/descrição da licitação',exemplo:'Pregão Eletrônico'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'elemento_despesa_codigo',tipo:'Texto',desc:'Código do elemento de despesa',exemplo:'33903'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'elemento_despesa_descricao',tipo:'Texto',desc:'Descrição do elemento de despesa',exemplo:'Passagens e Despesas com Locomoção'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'item_despesa_codigo',tipo:'Texto',desc:'Código do item de despesa',exemplo:'339039'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'item_despesa_descricao',tipo:'Texto',desc:'Descrição do item de despesa',exemplo:'Outros Serviços de Terceiros - PJ'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'fonte_recurso_codigo',tipo:'Texto',desc:'Código da fonte de recurso',exemplo:'10'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'fonte_recurso_descricao',tipo:'Texto',desc:'Descrição da fonte de recurso',exemplo:'Receita de Impostos'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'valor_despesa_empenhada',tipo:'Numérico',desc:'Valor empenhado do empenho (R$)',exemplo:'50000.00'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'valor_despesa_liquidada',tipo:'Numérico',desc:'Valor liquidado do empenho (R$)',exemplo:'45000.00'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'valor_pago_financeiro',tipo:'Numérico',desc:'Valor pago financeiramente (R$)',exemplo:'40000.00'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'valor_despesa_liquidada_rp',tipo:'Numérico',desc:'Valor liquidado RP (R$)',exemplo:'2000.00'},
+  {tabela:'empenho',fonte:'favorecidoempenhoANO_N.csv',campo:'valor_pago_rp',tipo:'Numérico',desc:'Valor pago RP (R$)',exemplo:'1800.00'},
+  {tabela:'programa',fonte:'programaANO.csv',campo:'programa_codigo',tipo:'Texto',desc:'Código do programa orçamentário',exemplo:'001'},
+  {tabela:'programa',fonte:'programaANO.csv',campo:'programa_descricao',tipo:'Texto',desc:'Descrição do programa',exemplo:'Administração Geral'},
+  {tabela:'programa',fonte:'programaANO.csv',campo:'projeto_atividade_codigo',tipo:'Texto',desc:'Código do projeto/atividade',exemplo:'2001'},
+  {tabela:'programa',fonte:'programaANO.csv',campo:'projeto_atividade_descricao',tipo:'Texto',desc:'Descrição do projeto/atividade',exemplo:'Manutenção das Atividades'},
+  {tabela:'programa',fonte:'programaANO.csv',campo:'unidade_orcamentaria_codigo',tipo:'Texto',desc:'Código da unidade orçamentária',exemplo:'1201'},
+  {tabela:'programa',fonte:'programaANO.csv',campo:'unidade_orcamentaria_sigla',tipo:'Texto',desc:'Sigla da unidade orçamentária',exemplo:'AGE'},
+  {tabela:'programa',fonte:'programaANO.csv',campo:'unidade_orcamentaria_nome',tipo:'Texto',desc:'Nome da unidade orçamentária',exemplo:'Advocacia Geral do Estado'},
+  {tabela:'programa',fonte:'programaANO.csv',campo:'valor_despesa_empenhada',tipo:'Numérico',desc:'Valor empenhado por programa/ação (R$)',exemplo:'80000000.00'},
+  {tabela:'programa',fonte:'programaANO.csv',campo:'valor_despesa_liquidada',tipo:'Numérico',desc:'Valor liquidado por programa/ação (R$)',exemplo:'75000000.00'},
+  {tabela:'programa',fonte:'programaANO.csv',campo:'valor_pago_financeiro',tipo:'Numérico',desc:'Valor pago por programa/ação (R$)',exemplo:'70000000.00'},
+  {tabela:'programa',fonte:'programaANO.csv',campo:'valor_despesa_liquidada_rp',tipo:'Numérico',desc:'Valor liquidado RP por programa/ação (R$)',exemplo:'3000000.00'},
+  {tabela:'programa',fonte:'programaANO.csv',campo:'valor_pago_rp',tipo:'Numérico',desc:'Valor pago RP por programa/ação (R$)',exemplo:'2500000.00'},
+];
+
+let dicTabFilter = 'all';
+function renderDicionario() { renderDicTabela(); }
+
+function renderDicTabela() {
+  const q = (document.getElementById('dic-search')?.value||'').toLowerCase();
+  const filtered = DIC_DATA.filter(d =>
+    (dicTabFilter==='all' || d.tabela===dicTabFilter) &&
+    (!q || d.campo.toLowerCase().includes(q) || d.desc.toLowerCase().includes(q) || d.tabela.toLowerCase().includes(q))
+  );
+
+  const grupos = {};
+  filtered.forEach(d => { if(!grupos[d.tabela]) grupos[d.tabela]=[]; grupos[d.tabela].push(d); });
+
+  const NOMES = {orgao:'Órgão (orgaoANO.csv)', empenho:'Empenho/Favorecido (favorecidoempenhoANO_N.csv)', programa:'Programa (programaANO.csv)'};
+
+  let html = '';
+  Object.entries(grupos).forEach(([tab, rows]) => {
+    html += `<div class="metadata-container">
+      <div class="metadata-header"><i class="material-icons">table_chart</i> ${NOMES[tab]||tab}
+        <span style="margin-left:auto;">
+          <a href="https://github.com/transparencia-mg/portal_despesa/tree/main/dataset/data" target="_blank" class="btn-export" style="color:#fff;border-color:rgba(255,255,255,.3);"><i class="material-icons">code</i> GitHub</a>
+          <a href="https://dados.mg.gov.br/dataset/portal_despesa" target="_blank" class="btn-export" style="color:#fff;border-color:rgba(255,255,255,.3);margin-left:4px;"><i class="material-icons">open_in_new</i> dados.mg</a>
+        </span>
+      </div>
+      <table class="metadata-table">
+        <thead><tr><th>Campo</th><th>Tipo</th><th>Descrição</th><th>Exemplo</th><th>Arquivo</th></tr></thead>
+        <tbody>${rows.map(r=>`<tr>
+          <td><code>${r.campo}</code></td>
+          <td><span style="background:${r.tipo==='Numérico'?'#dbeafe':'#f0fdf4'};color:${r.tipo==='Numérico'?'#1e40af':'#166534'};padding:1px 6px;border-radius:10px;font-size:10px;font-weight:600;">${r.tipo}</span></td>
+          <td>${r.desc}</td>
+          <td><code>${r.exemplo}</code></td>
+          <td style="font-size:10.5px;color:#64748b;">${r.fonte}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>`;
+  });
+  if(!html) html='<div style="text-align:center;padding:30px;color:#94a3b8;">Nenhum campo encontrado.</div>';
+  document.getElementById('dic-content').innerHTML = html;
+}
+
+
+// ================================================================
+// NAVEGAÇÃO VG -> EMPENHO
+// ================================================================
+window.navegarParaEmpenho = function(nomeOrgao) {
+  // Ativar aba empenho
+  const tabBtn = document.querySelector('[data-bs-target="#tab-empenho"]');
+  if(tabBtn) { const tab = new bootstrap.Tab(tabBtn); tab.show(); }
+  // Preencher filtro de órgão
+  setTimeout(()=>{
+    const el = document.getElementById('emp-orgao');
+    if(el) { el.value = nomeOrgao; }
+    aplicarFiltroEmp();
+    showToast('Filtrado por: '+nomeOrgao);
+  }, 200);
+};
+
+// ================================================================
+// MODAL DETALHE EMPENHO
+// ================================================================
+window.abrirDetalheEmpenho = function(jsonStr) {
+  const d = JSON.parse(jsonStr);
+  const dt = (d.data_registro_doc_empenho||'').split('T')[0].split(' ')[0];
+  const pts = dt.split('-');
+  const dtFmt = pts.length===3 ? pts[2]+'/'+pts[1]+'/'+pts[0] : dt;
+  
+  const rows = [
+    ['Nº Empenho', d.numero_empenho],
+    ['Data de Registro', dtFmt],
+    ['Ano', d._ano||d.ano_de_exercicio],
+    ['Órgão', d.unidade_orcamentaria_nome],
+    ['Sigla', d.unidade_orcamentaria_sigla],
+    ['Código UO', d.unidade_orcamentaria_codigo],
+    ['Favorecido', d.razao_social_credor],
+    ['CNPJ/CPF', d.cnpj_cpf_credor_formatado],
+    ['Processo de Compra', d.numero_processo_compra_siad],
+    ['Modalidade Licitação', d.licitacao_descricao_da_modalidade],
+    ['Contrato', d._contrato],
+    ['Código Elemento', d.elemento_despesa_codigo],
+    ['Elemento Despesa', d.elemento_despesa_descricao],
+    ['Código Item', d.item_despesa_codigo],
+    ['Item Despesa', d.item_despesa_descricao],
+    ['Fonte Recurso', d.fonte_recurso_descricao],
+  ].filter(r=>r[1]&&r[1]!=='—');
+
+  const valores = [
+    ['Valor Empenhado', d.valor_despesa_empenhada],
+    ['Valor Liquidado', d.valor_despesa_liquidada],
+    ['Valor Pago', d.valor_pago_financeiro],
+    ['Vl. Liq. RP', d.valor_despesa_liquidada_rp],
+    ['Vl. Pago RP', d.valor_pago_rp],
+  ];
+
+  document.getElementById('modal-emp-title').textContent = 'Empenho Nº ' + (d.numero_empenho||'');
+  document.getElementById('modal-emp-body').innerHTML = `
+    <div class="row">
+      <div class="col-md-8">
+        <table style="width:100%;font-size:12px;border-collapse:collapse;">
+          ${rows.map(r=>`<tr>
+            <td style="padding:6px 10px;font-weight:700;color:#1a3a5c;width:40%;border-bottom:1px solid #f0f4f8;white-space:nowrap;">${r[0]}</td>
+            <td style="padding:6px 10px;color:#334155;border-bottom:1px solid #f0f4f8;">${r[1]||'—'}</td>
+          </tr>`).join('')}
+        </table>
+      </div>
+      <div class="col-md-4">
+        <div style="background:#f8fafd;border-radius:8px;padding:14px;">
+          <div style="font-size:11px;font-weight:700;color:#1a3a5c;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;">Valores</div>
+          ${valores.map(v=>`<div style="margin-bottom:8px;">
+            <div style="font-size:10px;color:#64748b;font-weight:600;">${v[0]}</div>
+            <div style="font-size:14px;font-weight:700;color:#171c21;">${fmt(v[1])}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  new bootstrap.Modal(document.getElementById('modalDetalheEmpenho')).show();
+};
+
+// ================================================================
+// MODAL DETALHE ITEM
+// ================================================================
+window.abrirDetalheItem = function(jsonStr) {
+  const d = JSON.parse(jsonStr);
+  const rows = [
+    ['Código Item', d.item_despesa_codigo],
+    ['Item Despesa', d.item_despesa_descricao],
+    ['Código Elemento', d.elemento_despesa_codigo],
+    ['Elemento Despesa', d.elemento_despesa_descricao],
+    ['Órgão', d.unidade_orcamentaria_nome],
+    ['Sigla', d.unidade_orcamentaria_sigla],
+    ['Processo de Compra', d.numero_processo_compra_siad],
+    ['Modalidade Licitação', d.licitacao_descricao_da_modalidade],
+    ['Contrato', d._contrato],
+    ['Ano', d._ano||d.ano_de_exercicio],
+  ].filter(r=>r[1]&&r[1]!=='—');
+
+  const valores = [
+    ['Valor Empenhado', d.valor_despesa_empenhada],
+    ['Valor Liquidado', d.valor_despesa_liquidada],
+    ['Valor Pago', d.valor_pago_financeiro],
+    ['Vl. Liq. RP', d.valor_despesa_liquidada_rp],
+    ['Vl. Pago RP', d.valor_pago_rp],
+  ];
+
+  document.getElementById('modal-item-title').textContent = 'Item: ' + (d.item_despesa_codigo||'') + ' — ' + (d.item_despesa_descricao||'');
+  document.getElementById('modal-item-body').innerHTML = `
+    <div class="row">
+      <div class="col-md-8">
+        <table style="width:100%;font-size:12px;border-collapse:collapse;">
+          ${rows.map(r=>`<tr>
+            <td style="padding:6px 10px;font-weight:700;color:#1a3a5c;width:40%;border-bottom:1px solid #f0f4f8;white-space:nowrap;">${r[0]}</td>
+            <td style="padding:6px 10px;color:#334155;border-bottom:1px solid #f0f4f8;">${r[1]||'—'}</td>
+          </tr>`).join('')}
+        </table>
+      </div>
+      <div class="col-md-4">
+        <div style="background:#f8fafd;border-radius:8px;padding:14px;">
+          <div style="font-size:11px;font-weight:700;color:#1a3a5c;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;">Valores</div>
+          ${valores.map(v=>`<div style="margin-bottom:8px;">
+            <div style="font-size:10px;color:#64748b;font-weight:600;">${v[0]}</div>
+            <div style="font-size:14px;font-weight:700;color:#171c21;">${fmt(v[1])}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  new bootstrap.Modal(document.getElementById('modalDetalheItem')).show();
+};
+
+// Popular anos no QB filter
+function popularAnosQB() {
+  const el = document.getElementById('qb-fil-ano');
+  if(!el) return;
+  const anos = [...new Set([...dadosEmpenho.map(d=>d._ano),...dadosPrograma.map(d=>d._ano)])].filter(Boolean).sort().reverse();
+  anos.forEach(a=>{ if(!el.querySelector(`option[value="${a}"]`)) { const o=document.createElement('option'); o.value=a; o.textContent=a; el.appendChild(o); }});
+}
+
+window.filtrarDic = function() { renderDicTabela(); };
+window.filterDicTab = function(tab, btn) {
+  dicTabFilter = tab;
+  document.querySelectorAll('.dic-tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDicTabela();
+};
+
+// ================================================================
+// DOWNLOADS
+// ================================================================
+function popularDownloads() {
+  const BASE = 'https://raw.githubusercontent.com/transparencia-mg/portal_despesa/refs/heads/main/dataset/data/';
+
+  const orgBtns = document.getElementById('dl-orgao-btns');
+  const empBtns = document.getElementById('dl-emp-btns');
+  const progBtns = document.getElementById('dl-prog-btns');
+
+  ANOS.forEach(ano => {
+    orgBtns.innerHTML += `<a href="${BASE}orgao${ano}.csv" download class="btn-pesquisa" style="text-decoration:none;font-size:11px;height:30px;"><i class="material-icons" style="font-size:12px;">download</i> CSV ${ano}</a>`;
+    empBtns.innerHTML += `<a href="${BASE}favorecidoempenho${ano}_1.csv" download class="btn-pesquisa" style="text-decoration:none;font-size:11px;height:30px;"><i class="material-icons" style="font-size:12px;">download</i> CSV ${ano} (parte 1)</a>
+      <a href="${BASE}favorecidoempenho${ano}_2.csv" download class="btn-pesquisa" style="text-decoration:none;font-size:11px;height:30px;"><i class="material-icons" style="font-size:12px;">download</i> CSV ${ano} (parte 2)</a>`;
+    progBtns.innerHTML += `<a href="${BASE}programa${ano}.csv" download class="btn-pesquisa" style="text-decoration:none;font-size:11px;height:30px;"><i class="material-icons" style="font-size:12px;">download</i> CSV ${ano}</a>`;
+  });
+}
+
+// ================================================================
+// EXPORTS
+// ================================================================
+function getExportData(tab) {
+  if(tab==='vg') return {data:pgVG.filtered, cols:[
+    {key:'unidade_orcamentaria_codigo',label:'Código'},{key:'unidade_orcamentaria_sigla',label:'Sigla'},{key:'unidade_orcamentaria_nome',label:'Órgão'},
+    {key:'valor_despesa_empenhada',label:'Vl. Empenhado',num:true},{key:'valor_despesa_liquidada',label:'Vl. Liquidado',num:true},
+    {key:'valor_pago_financeiro',label:'Vl. Pago',num:true},{key:'valor_despesa_liquidada_rp',label:'Vl. Liq. RP',num:true},{key:'valor_pago_rp',label:'Vl. Pago RP',num:true}
+  ]};
+  if(tab==='emp') return {data:pgEmp.filtered, cols:EMP_COLS.filter(c=>colVisEmp[c.key])};
+  if(tab==='it') return {data:pgIt.filtered, cols:IT_COLS.filter(c=>colVisIt[c.key])};
+  if(tab==='pg') return {data:pgPg.filtered, cols:PG_COLS.filter(c=>colVisPg[c.key])};
+  if(tab==='qb') return {data:pgQB.filtered, cols:qbCampos};
+  return {data:[],cols:[]};
+}
+
+window.exportarCSV = function(tab) {
+  const {data,cols} = getExportData(tab);
+  if(!data.length){showToast('Sem dados para exportar.','error');return;}
+  let csv = cols.map(c=>c.label).join(';')+'\n';
+  data.forEach(d => { csv += cols.map(c=>c.num?parseNum(d[c.key]).toFixed(2):(d[c.key]||'')).join(';')+'\n'; });
+  const blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download=`despesa_${tab}_${new Date().toISOString().slice(0,10)}.csv`; a.click();
+  showToast('CSV exportado com sucesso!');
+};
+
+window.exportarPDF = function(tab) {
+  const {data,cols} = getExportData(tab);
+  if(!data.length){showToast('Sem dados para exportar.','error');return;}
+  const {jsPDF} = window.jspdf;
+  const doc = new jsPDF({orientation:'landscape'});
+  doc.setFontSize(11);
+  doc.text('Dashboard de Despesa - Portal da Transparência MG',14,14);
+  doc.setFontSize(8);
+  doc.text('Gerado em: '+new Date().toLocaleDateString('pt-BR'),14,20);
+  doc.autoTable({
+    startY:25,
+    head:[cols.map(c=>c.label)],
+    body:data.slice(0,500).map(d=>cols.map(c=>c.num?parseNum(d[c.key]).toFixed(2):(d[c.key]||''))),
+    styles:{fontSize:6,cellPadding:2},
+    headStyles:{fillColor:[84,105,123],textColor:255,fontStyle:'bold'},
+    alternateRowStyles:{fillColor:[248,250,253]},
+  });
+  doc.save(`despesa_${tab}_${new Date().toISOString().slice(0,10)}.pdf`);
+  showToast('PDF exportado com sucesso!');
+};
+
+window.imprimirVG = function() { window.print(); };
+window.imprimirTabela = function() { window.print(); };
+window.imprimirQB = function() { window.print(); };
+
+// ================================================================
+// COLUMN SELECTOR TOGGLE
+// ================================================================
+window.toggleColSel = function(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('show');
+  // close others
+  document.querySelectorAll('.col-sel-dropdown').forEach(d=>{ if(d.id!==id) d.classList.remove('show'); });
+};
+document.addEventListener('click', e => {
+  if(!e.target.closest('.col-sel')) {
+    document.querySelectorAll('.col-sel-dropdown').forEach(d=>d.classList.remove('show'));
+  }
+});
+
+// ================================================================
+// INIT
+// ================================================================
+document.addEventListener('DOMContentLoaded', () => {
+  // populate year dropdowns
+  ANOS.forEach(a => {
+    ['vg-ano','emp-ano','it-ano','pg-ano'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el && !el.querySelector(`option[value="${a}"]`)) {
+        const opt=document.createElement('option'); opt.value=a; opt.textContent=a; el.appendChild(opt);
+      }
+    });
+  });
+  carregarDados();
+});
+</script>
+</body>
+</html>
