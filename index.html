@@ -678,15 +678,18 @@ body,button,input,select,textarea,span,div{font-family:'Montserrat',sans-serif!i
 // ================================================================
 // CONFIG & GLOBALS
 // ================================================================
-const ANOS = [2026]; // adicionar 2023,2024,2025 quando disponíveis
+const ANOS = [2025, 2026];
 const BASE_RAW = 'https://raw.githubusercontent.com/transparencia-mg/portal_despesa/refs/heads/main/dataset/data/';
+
+// Número de partes por ano
+const EMP_PARTES = { 2025: 5, 2026: 3 };
 
 const URLS = {
   orgao: ano => [`${BASE_RAW}orgao${ano}.csv`],
-  empenho: ano => [
-    `${BASE_RAW}favorecidoempenho${ano}_1.csv`,
-    `${BASE_RAW}favorecidoempenho${ano}_2.csv`
-  ],
+  empenho: ano => {
+    const partes = EMP_PARTES[ano] || 2;
+    return Array.from({length: partes}, (_, i) => `${BASE_RAW}favorecidoempenho${ano}_${i+1}.csv`);
+  },
   programa: ano => [`${BASE_RAW}programa${ano}.csv`]
 };
 
@@ -820,16 +823,17 @@ async function carregarDados() {
     }
     dadosOrgao = orgRows;
 
-    // Empenho (2 partes)
+    // Empenho (múltiplas partes por ano)
     let empRows = [];
     for(const ano of ANOS) {
-      for(const url of URLS.empenho(ano)) {
+      const urls = URLS.empenho(ano);
+      for(let i = 0; i < urls.length; i++) {
         try {
-          showLoading(`Carregando empenho ${ano}...`);
-          const rows = await fetchCSV(url+'?'+Date.now());
+          showLoading(`Carregando empenho ${ano} (parte ${i+1} de ${urls.length})...`);
+          const rows = await fetchCSV(urls[i]+'?'+Date.now());
           rows.forEach(r => { r._ano = String(ano); });
           empRows = empRows.concat(rows);
-        } catch(e) { console.warn('Empenho '+url, e); }
+        } catch(e) { console.warn('Empenho '+urls[i], e); }
       }
     }
     dadosEmpenho = empRows;
@@ -1812,8 +1816,10 @@ function popularDownloads() {
   const empBtns = document.getElementById('dl-emp-btns');
   if(!empBtns) return;
   ANOS.forEach(ano => {
-    empBtns.innerHTML += `<a href="${BASE}favorecidoempenho${ano}_1.csv" download class="btn-pesquisa" style="text-decoration:none;font-size:11px;height:30px;"><i class="material-icons" style="font-size:12px;">download</i> CSV ${ano} (parte 1)</a>
-      <a href="${BASE}favorecidoempenho${ano}_2.csv" download class="btn-pesquisa" style="text-decoration:none;font-size:11px;height:30px;"><i class="material-icons" style="font-size:12px;">download</i> CSV ${ano} (parte 2)</a>`;
+    const partes = EMP_PARTES[ano] || 2;
+    for(let i = 1; i <= partes; i++) {
+      empBtns.innerHTML += `<a href="${BASE}favorecidoempenho${ano}_${i}.csv" download class="btn-pesquisa" style="text-decoration:none;font-size:11px;height:30px;"><i class="material-icons" style="font-size:12px;">download</i> CSV ${ano} (parte ${i})</a>\n      `;
+    }
   });
 }
 
