@@ -1,6 +1,6 @@
 {
   "version": "4.16.6",
-  "time": 10.379,
+  "time": 30.144,
   "errors": [],
   "tasks": [
     {
@@ -12,8 +12,8 @@
         "encoding": "utf-8-sig",
         "format": "csv",
         "hashing": "md5",
-        "name": "favorecidoempenho2026_1",
-        "path": "data/favorecidoempenho2026_1.csv",
+        "name": "favorecidoempenho2025_1",
+        "path": "data/favorecidoempenho2025_1.csv",
         "profile": "tabular-data-resource",
         "schema": {
           "fields": [
@@ -27,6 +27,10 @@
             },
             {
               "name": "razao_social_credor",
+              "type": "string"
+            },
+            {
+              "name": "cnpj_cpf_credor_formatado",
               "type": "string"
             },
             {
@@ -102,13 +106,698 @@
         "scheme": "file",
         "title": "Insira um título humanamente legível para este recurso.",
         "stats": {
-          "hash": "e3cf7eababfd91afd0cf6eb498fffe45",
-          "bytes": 60878638,
-          "fields": 20,
-          "rows": 200417
+          "hash": "2a1c96db3933324f69c5be97a160ca3d",
+          "bytes": 20894916,
+          "fields": 21,
+          "rows": 58081
         }
       },
-      "time": 8.975,
+      "time": 2.401,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [],
+      "stats": {
+        "errors": 0
+      },
+      "valid": true
+    },
+    {
+      "resource": {
+        "description": "Insira a descrição/explicação detalhada deste recurso.",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "favorecidoempenho2025_2",
+        "path": "data/favorecidoempenho2025_2.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "numero_empenho",
+              "type": "integer"
+            },
+            {
+              "name": "data_registro_doc_empenho",
+              "type": "date"
+            },
+            {
+              "name": "razao_social_credor",
+              "type": "string"
+            },
+            {
+              "name": "cnpj_cpf_credor_formatado",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "unidade_orcamentaria_sigla",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_nome",
+              "type": "string"
+            },
+            {
+              "name": "numero_processo_compra_siad",
+              "type": "string"
+            },
+            {
+              "name": "licitacao_descricao_da_modalidade",
+              "type": "string"
+            },
+            {
+              "name": "contratoconvenio_saida",
+              "type": "integer"
+            },
+            {
+              "name": "elemento_despesa_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "elemento_despesa_descricao",
+              "type": "string"
+            },
+            {
+              "name": "item_despesa_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "item_despesa_descricao",
+              "type": "string"
+            },
+            {
+              "name": "fonte_recurso_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "fonte_recurso_descricao",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_empenhada",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_liquidada",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_financeiro",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_liquidada_rp",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_rp",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Insira um título humanamente legível para este recurso.",
+        "stats": {
+          "hash": "934971f462829d6bfef2d605c9361f4d",
+          "bytes": 31904417,
+          "fields": 21,
+          "rows": 99999
+        }
+      },
+      "time": 4.053,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [],
+      "stats": {
+        "errors": 0
+      },
+      "valid": true
+    },
+    {
+      "resource": {
+        "description": "Insira a descrição/explicação detalhada deste recurso.",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "favorecidoempenho2025_3",
+        "path": "data/favorecidoempenho2025_3.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "numero_empenho",
+              "type": "integer"
+            },
+            {
+              "name": "data_registro_doc_empenho",
+              "type": "date"
+            },
+            {
+              "name": "razao_social_credor",
+              "type": "string"
+            },
+            {
+              "name": "cnpj_cpf_credor_formatado",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "unidade_orcamentaria_sigla",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_nome",
+              "type": "string"
+            },
+            {
+              "name": "numero_processo_compra_siad",
+              "type": "string"
+            },
+            {
+              "name": "licitacao_descricao_da_modalidade",
+              "type": "string"
+            },
+            {
+              "name": "contratoconvenio_saida",
+              "type": "integer"
+            },
+            {
+              "name": "elemento_despesa_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "elemento_despesa_descricao",
+              "type": "string"
+            },
+            {
+              "name": "item_despesa_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "item_despesa_descricao",
+              "type": "string"
+            },
+            {
+              "name": "fonte_recurso_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "fonte_recurso_descricao",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_empenhada",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_liquidada",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_financeiro",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_liquidada_rp",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_rp",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Insira um título humanamente legível para este recurso.",
+        "stats": {
+          "hash": "e3a78c0c4498ffd70dcd2ae73bf9a6a1",
+          "bytes": 31551746,
+          "fields": 21,
+          "rows": 99999
+        }
+      },
+      "time": 4.04,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [],
+      "stats": {
+        "errors": 0
+      },
+      "valid": true
+    },
+    {
+      "resource": {
+        "description": "Insira a descrição/explicação detalhada deste recurso.",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "favorecidoempenho2025_4",
+        "path": "data/favorecidoempenho2025_4.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "numero_empenho",
+              "type": "integer"
+            },
+            {
+              "name": "data_registro_doc_empenho",
+              "type": "date"
+            },
+            {
+              "name": "razao_social_credor",
+              "type": "string"
+            },
+            {
+              "name": "cnpj_cpf_credor_formatado",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "unidade_orcamentaria_sigla",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_nome",
+              "type": "string"
+            },
+            {
+              "name": "numero_processo_compra_siad",
+              "type": "string"
+            },
+            {
+              "name": "licitacao_descricao_da_modalidade",
+              "type": "string"
+            },
+            {
+              "name": "contratoconvenio_saida",
+              "type": "integer"
+            },
+            {
+              "name": "elemento_despesa_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "elemento_despesa_descricao",
+              "type": "string"
+            },
+            {
+              "name": "item_despesa_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "item_despesa_descricao",
+              "type": "string"
+            },
+            {
+              "name": "fonte_recurso_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "fonte_recurso_descricao",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_empenhada",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_liquidada",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_financeiro",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_liquidada_rp",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_rp",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Insira um título humanamente legível para este recurso.",
+        "stats": {
+          "hash": "97bc498db99ef32a9122c5767421f5cc",
+          "bytes": 32456783,
+          "fields": 21,
+          "rows": 100000
+        }
+      },
+      "time": 3.994,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [],
+      "stats": {
+        "errors": 0
+      },
+      "valid": true
+    },
+    {
+      "resource": {
+        "description": "Insira a descrição/explicação detalhada deste recurso.",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "favorecidoempenho2025_5",
+        "path": "data/favorecidoempenho2025_5.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "numero_empenho",
+              "type": "integer"
+            },
+            {
+              "name": "data_registro_doc_empenho",
+              "type": "date"
+            },
+            {
+              "name": "razao_social_credor",
+              "type": "string"
+            },
+            {
+              "name": "cnpj_cpf_credor_formatado",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "unidade_orcamentaria_sigla",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_nome",
+              "type": "string"
+            },
+            {
+              "name": "numero_processo_compra_siad",
+              "type": "string"
+            },
+            {
+              "name": "licitacao_descricao_da_modalidade",
+              "type": "string"
+            },
+            {
+              "name": "contratoconvenio_saida",
+              "type": "integer"
+            },
+            {
+              "name": "elemento_despesa_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "elemento_despesa_descricao",
+              "type": "string"
+            },
+            {
+              "name": "item_despesa_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "item_despesa_descricao",
+              "type": "string"
+            },
+            {
+              "name": "fonte_recurso_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "fonte_recurso_descricao",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_empenhada",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_liquidada",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_financeiro",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_liquidada_rp",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_rp",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Insira um título humanamente legível para este recurso.",
+        "stats": {
+          "hash": "b7a30e62ce15128d9c8f89e78ba3129d",
+          "bytes": 31544039,
+          "fields": 21,
+          "rows": 102874
+        }
+      },
+      "time": 4.131,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [],
+      "stats": {
+        "errors": 0
+      },
+      "valid": true
+    },
+    {
+      "resource": {
+        "description": "Insira a descrição/explicação detalhada deste recurso.",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "favorecidoempenho2026_1",
+        "path": "data/favorecidoempenho2026_1.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "numero_empenho",
+              "type": "integer"
+            },
+            {
+              "name": "data_registro_doc_empenho",
+              "type": "date"
+            },
+            {
+              "name": "razao_social_credor",
+              "type": "string"
+            },
+            {
+              "name": "cnpj_cpf_credor_formatado",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "unidade_orcamentaria_sigla",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_nome",
+              "type": "string"
+            },
+            {
+              "name": "numero_processo_compra_siad",
+              "type": "string"
+            },
+            {
+              "name": "licitacao_descricao_da_modalidade",
+              "type": "string"
+            },
+            {
+              "name": "contratoconvenio_saida",
+              "type": "integer"
+            },
+            {
+              "name": "elemento_despesa_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "elemento_despesa_descricao",
+              "type": "string"
+            },
+            {
+              "name": "item_despesa_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "item_despesa_descricao",
+              "type": "string"
+            },
+            {
+              "name": "fonte_recurso_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "fonte_recurso_descricao",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_empenhada",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_liquidada",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_financeiro",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_liquidada_rp",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_rp",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Insira um título humanamente legível para este recurso.",
+        "stats": {
+          "hash": "2a1c96db3933324f69c5be97a160ca3d",
+          "bytes": 20894916,
+          "fields": 21,
+          "rows": 58081
+        }
+      },
+      "time": 2.35,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -163,6 +852,10 @@
               "type": "string"
             },
             {
+              "name": "cnpj_cpf_credor_formatado",
+              "type": "string"
+            },
+            {
               "name": "unidade_orcamentaria_codigo",
               "type": "integer"
             },
@@ -235,13 +928,239 @@
         "scheme": "file",
         "title": "Insira um título humanamente legível para este recurso.",
         "stats": {
-          "hash": "c47ef2832adff5f4bd701ce01aa4590c",
-          "bytes": 9702430,
-          "fields": 20,
-          "rows": 27943
+          "hash": "c90493109d342f21d618cde6ebc8649f",
+          "bytes": 35271382,
+          "fields": 21,
+          "rows": 111999
         }
       },
-      "time": 1.291,
+      "time": 4.544,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [],
+      "stats": {
+        "errors": 0
+      },
+      "valid": true
+    },
+    {
+      "resource": {
+        "description": "Insira a descrição/explicação detalhada deste recurso.",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "favorecidoempenho2026_3",
+        "path": "data/favorecidoempenho2026_3.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "numero_empenho",
+              "type": "integer"
+            },
+            {
+              "name": "data_registro_doc_empenho",
+              "type": "date"
+            },
+            {
+              "name": "razao_social_credor",
+              "type": "string"
+            },
+            {
+              "name": "cnpj_cpf_credor_formatado",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "unidade_orcamentaria_sigla",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_nome",
+              "type": "string"
+            },
+            {
+              "name": "numero_processo_compra_siad",
+              "type": "string"
+            },
+            {
+              "name": "licitacao_descricao_da_modalidade",
+              "type": "string"
+            },
+            {
+              "name": "contratoconvenio_saida",
+              "type": "integer"
+            },
+            {
+              "name": "elemento_despesa_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "elemento_despesa_descricao",
+              "type": "string"
+            },
+            {
+              "name": "item_despesa_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "item_despesa_descricao",
+              "type": "string"
+            },
+            {
+              "name": "fonte_recurso_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "fonte_recurso_descricao",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_empenhada",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_liquidada",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_financeiro",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_liquidada_rp",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_rp",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Insira um título humanamente legível para este recurso.",
+        "stats": {
+          "hash": "08d00cdc20d02ce43915e180e82a3b76",
+          "bytes": 34345328,
+          "fields": 21,
+          "rows": 109480
+        }
+      },
+      "time": 4.371,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [],
+      "stats": {
+        "errors": 0
+      },
+      "valid": true
+    },
+    {
+      "resource": {
+        "description": "Insira a descrição/explicação detalhada deste recurso.",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "orgao2025",
+        "path": "data/orgao2025.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "ano_de_exercicio",
+              "type": "integer"
+            },
+            {
+              "name": "unidade_orcamentaria_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "unidade_orcamentaria_sigla",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_nome",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_empenhada",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_liquidada",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_financeiro",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_liquidada_rp",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_rp",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Insira um título humanamente legível para este recurso.",
+        "stats": {
+          "hash": "79f83c935e8a02f47b81fb12fc9232d8",
+          "bytes": 9092,
+          "fields": 9,
+          "rows": 72
+        }
+      },
+      "time": 0.014,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -330,7 +1249,108 @@
           "rows": 71
         }
       },
-      "time": 0.015,
+      "time": 0.014,
+      "scope": [
+        "hash-count-error",
+        "byte-count-error",
+        "field-count-error",
+        "row-count-error",
+        "blank-header",
+        "extra-label",
+        "missing-label",
+        "blank-label",
+        "duplicate-label",
+        "incorrect-label",
+        "blank-row",
+        "primary-key-error",
+        "foreign-key-error",
+        "extra-cell",
+        "missing-cell",
+        "type-error",
+        "constraint-error",
+        "unique-error"
+      ],
+      "partial": false,
+      "errors": [],
+      "stats": {
+        "errors": 0
+      },
+      "valid": true
+    },
+    {
+      "resource": {
+        "description": "Insira a descrição/explicação detalhada deste recurso.",
+        "dialect": {
+          "delimiter": ";"
+        },
+        "encoding": "utf-8-sig",
+        "format": "csv",
+        "hashing": "md5",
+        "name": "programa2025",
+        "path": "data/programa2025.csv",
+        "profile": "tabular-data-resource",
+        "schema": {
+          "fields": [
+            {
+              "name": "programa_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "programa_descricao",
+              "type": "string"
+            },
+            {
+              "name": "projeto_atividade_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "projeto_atividade_descricao",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_codigo",
+              "type": "integer"
+            },
+            {
+              "name": "unidade_orcamentaria_sigla",
+              "type": "string"
+            },
+            {
+              "name": "unidade_orcamentaria_nome",
+              "type": "string"
+            },
+            {
+              "name": "valor_despesa_empenhada",
+              "type": "any"
+            },
+            {
+              "name": "valor_despesa_liquidada",
+              "type": "any"
+            },
+            {
+              "name": "valor_pago_financeiro",
+              "type": "any"
+            },
+            {
+              "name": "valor_despesa_liquidada_rp",
+              "type": "string"
+            },
+            {
+              "name": "valor_pago_rp",
+              "type": "string"
+            }
+          ]
+        },
+        "scheme": "file",
+        "title": "Insira um título humanamente legível para este recurso.",
+        "stats": {
+          "hash": "e45c9fb2f2dcc35cbc2d618d8c373ced",
+          "bytes": 201239,
+          "fields": 12,
+          "rows": 1086
+        }
+      },
+      "time": 0.042,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -431,7 +1451,7 @@
           "rows": 979
         }
       },
-      "time": 0.039,
+      "time": 0.037,
       "scope": [
         "hash-count-error",
         "byte-count-error",
@@ -462,7 +1482,7 @@
   ],
   "stats": {
     "errors": 0,
-    "tasks": 4
+    "tasks": 12
   },
   "valid": true
 }
